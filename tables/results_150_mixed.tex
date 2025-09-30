@@ -1,0 +1,21 @@
+\begin{table}[H]
+\centering
+\small
+\caption[Evaluation for Chunk Size 150, Mixed Split]{\textbf{Evaluation for chunk size 150, mixed split (synthetic data in train + test).}}
+\label{tab:150_mixed}
+\begin{tabular}{@{}lrrrr rr@{}} % = 1 + 5 + 1 + 2 = 9 Spalten
+\toprule
+  & \multicolumn{5}{c}{\textbf{All}} 
+  & \multicolumn{1}{c}{\textbf{Synth-only}} \\
+\cmidrule(lr){2-6} \cmidrule(lr){7-7}
+Step (Epoch) & Loss & Accuracy & Precision & Recall & \textbf{F1} 
+& Accuracy \\
+\midrule
+3000 (0.36) & 0.352 & 0.939 & 0.870 & 0.992 & \textbf{0.927} & 0.940 \\
+9000 (1.07) & 0.257 & 0.975 & 0.958 & 0.979 & \textbf{0.969} & 0.993 \\
+15000 (1.79) & 0.253 & 0.977 & 0.968 & 0.974 & \textbf{0.971} & 0.987 \\
+21000 (2.50) & 0.248 & 0.980 & 0.965 & 0.986 & \textbf{0.975} & 0.993 \\
+25200 (3.00) & 0.255 & 0.979 & 0.957 & 0.989 & \textbf{0.973} & 0.991 \\
+\bottomrule
+\end{tabular}
+\end{table}

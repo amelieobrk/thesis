@@ -1,0 +1,184 @@
+% it is part of
+% TUDa-CI -- Corporate Design for TU Darmstadt
+% ----------------------------------------------------------------------------
+%
+% Copyright (C) 2018--2025 by Marei Peischl <marei@peitex.de>
+%
+% ============================================================================
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3c
+% of this license or (at your option) any later version.
+% The latest version of this license is in
+% http://www.latex-project.org/lppl.txt
+% version 2008/05/04 or later.
+%
+% This work has the LPPL maintenance status `maintained'.
+%
+% The current maintainer of this work is
+%   Marei Peischl <tuda-ci@peitex.de>
+%
+% The development repository can be found at
+% https://github.com/tudace/tuda_latex_templates
+% Please use the issue tracker for feedback!
+%
+% If you need a compiled version of this document, have a look at
+% http://mirror.ctan.org/macros/latex/contrib/tuda-ci/doc
+% or at the documentation directory of this package (if installed)
+% <path to your LaTeX distribution>/doc/latex/tuda-ci
+% ============================================================================
+%
+% !TeX program = lualatex
+
+% Enable PDF/A via pdfmanagement (recommended)
+\DocumentMetadata{
+  pdfstandard={a-2b},
+  pdfversion=1.7,
+  lang=en,
+}
+
+\documentclass[
+  english,
+  accentcolor=9c,
+  ruledheaders=section,
+  class=report,
+  thesis={type=master},
+  fontsize=11pt,
+  parskip=half,
+  custommargins=false,
+  marginpar=false,
+  pdfa=true % Hinweis: wird bei \DocumentMetadata i. d. R. ignoriert
+]{tudapub}
+
+%%%%%%%%%%%%%%%%%%%
+% Language setup
+%%%%%%%%%%%%%%%%%%%
+\usepackage[main=english, german]{babel}
+
+%%%%%%%%%%%%%%%%%%%
+% Typography & utils
+%%%%%%%%%%%%%%%%%%%
+% we already have booktabs/array loaded; no extra packages needed
+
+\usepackage{microtype}
+\usepackage[autostyle]{csquotes} % \enquote
+\usepackage{xurl}   
+% --- TikZ & PGF ---
+\usepackage{tikz}
+\usetikzlibrary{positioning} % für "below=of ..." und "right=of ..."
+\usetikzlibrary{calc}        % für Koordinaten-Berechnungen ($(a)+(x,y)$)
+\usetikzlibrary{arrows.meta} % für Pfeilspitzen wie ">=Stealth"
+\usetikzlibrary{shapes.misc} % falls du rounded corners etc. nutzt
+\usetikzlibrary{fit}         % nur wenn du fit nodes benutzt
+\usetikzlibrary{backgrounds} % optional, für Ebenen (nicht zwingend)
+
+% --- Farben (falls nicht schon geladen) ---
+\usepackage{xcolor}
+
+% --- deine Node Styles (box, op, note, streamText, streamLIWC etc.) ---
+% Falls du die noch nicht global definiert hast, brauchst du sowas:
+\tikzset{
+  box/.style={draw, thick, rounded corners, align=center, inner sep=3pt},
+  op/.style={draw, thick, rectangle, align=center, rounded corners=1pt,
+             fill=gray!5, inner sep=3pt},
+  note/.style={align=left, font=\footnotesize, text=black!60},
+  streamText/.style={draw=blue!60!black, text=blue!60!black},
+  streamLIWC/.style={draw=violet!70!black, text=violet!70!black},
+}           %
+
+%%%%%%%%%%%%%%%%%%%
+% Figures & tables
+%%%%%%%%%%%%%%%%%%%
+\usepackage{graphicx}
+\graphicspath{{figures/}}        % Bilder im Ordner "figures/"
+\usepackage{float}               % für [H]
+\usepackage{subcaption}
+\captionsetup[sub]{font=small}
+
+\usepackage{booktabs}
+\usepackage{ragged2e} % stellt \RaggedRight bereit
+
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{pdflscape}
+\setlength{\LTcapwidth}{\textwidth} % Captionbreite für longtable
+\usepackage{multirow}
+\usepackage[section]{placeins}   % Floats nicht über Section hinaus
+
+%%%%%%%%%%%%%%%%%%%
+% Math
+%%%%%%%%%%%%%%%%%%%
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+%%%%%%%%%%%%%%%%%%%
+% Misc
+%%%%%%%%%%%%%%%%%%%
+\usepackage{comment}
+\usepackage{makecell}
+
+%%%%%%%%%%%%%%%%%%%
+% Bibliography
+%%%%%%%%%%%%%%%%%%%
+\usepackage[style=ieee,backend=biber]{biblatex}
+\addbibresource{literature.bib}
+
+%%%%%%%%%%%%%%%%%%%
+% Meta
+%%%%%%%%%%%%%%%%%%%
+\title{Master Thesis: Fusion of transformer-based language representations with psycholinguistic LIWC features for improved detection of cybergrooming in chat logs}
+\author{Amelie Oberkirch}
+\reviewer{Shiying Fan \and Prof. Dr. Martin Steinebach}
+
+% The following elements will be placed on the title page
+\department{Informatik}% If defined the shorthand will be replaced by the full name otherwise it's used directly.
+\institute{Fraunhofer-Institut für Sichere Informationstechnologie}
+\group{Media Security}
+
+\submissiondate{13. October 2025}
+
+%\tuprints{urn=XXXXX,printid=XXXX,year=2022,license=cc-by-4.0}% License information for TUprints
+
+\begin{document}
+
+\maketitle
+
+%% The affidavit was deactivated by default at the request of Department II.
+%% According to the department, the legally binding text can be found at
+%% https://www.tu-darmstadt.de/studieren/studierende_tu/studienorganisation_und_tucan/hilfe_und_faq/artikel_details_de_en_37824.de.jsp
+%% The docx file should be used, printed out, signed, scanned and then integrated.
+%% The easiest way to do this is to use the pdfpages package.
+%%
+%% For compatibility reasons for the other templates, the function is still available.
+%% \affidavit[
+%%   signature-image={\includegraphics[width=\width,height=1cm]{example-image}},
+%%   % <there may be additional options here>
+%% ]
+
+\tableofcontents
+\listoffigures
+\listoftables
+% Optional:
+% \listoffigures
+% \listoftables
+
+\include{chapters/0_abstract}
+\include{chapters/1_introduction}
+\include{chapters/2_related_work_grooming}
+\include{chapters/3_related_work_transformer_based_models}
+\include{chapters/4_related_work_psycholinguistics_and_LIWC}
+\include{chapters/5_related_work_feature_fusion_transformer_LIWC}
+\include{chapters/6_dataset_and_preprocessing}
+\include{chapters/7_methodology}
+\include{chapters/8_evaluation}
+\include{chapters/9_discussion}
+\include{chapters/10_conclusion_and_outlook}
+
+\printbibliography
+
+\chapter{Appendix}
+\include{tables/liwc22_categories_appendix_fixed}
+\include{tables/appendix_liwc_table}
+\include{tables/appendix_chunk_wise_liwc}
+
+\end{document}
+% End of file.

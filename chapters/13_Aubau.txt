@@ -1,0 +1,142 @@
+1. Abstract (auf Englisch + ggf. Deutsch)
+Kurze, prägnante Zusammenfassung deiner Arbeit:
+
+Ziel
+
+Methode
+
+Daten
+
+wichtigste Ergebnisse
+
+Beitrag
+
+
+
+2. Introduction
+
+Relevanz des Themas (gesellschaftlich, technisch, wissenschaftlich)
+
+Zielsetzung & zentrale Forschungsfrage
+
+Struktur der Arbeit („This thesis is structured as follows…“)
+
+
+
+
+3. Background & Related Work (Theoretischer Rahmen)
+
+
+
+3.1 Grooming Detection in Online Chats
+Definition Grooming (ggf. juristisch und psychologisch)
+
+Typische Merkmale & sprachliche Strategien
+
+Bisherige Ansätze zur Erkennung (NLP, Machine Learning etc.)
+
+
+
+3.2 Psycholinguistik & LIWC
+LIWC: Aufbau, Dimensionen, Anwendungsbeispiele
+
+Psychometrisches Profiling in NLP
+
+Relevanz von Emotionen, Pronomen, Denkprozessen etc.
+
+LIWC in der Forschung von Cybergrooming
+
+
+3.3 Transformer-basierte Modelle in NLP
+Funktionsweise von BERT
+
+Vergleich zu DeBERTa
+
+Typische Anwendungsbereiche & Vorteile bei Chatdaten
+
+
+Transformer basierte Modelle in der cybergrooming forschung
+
+3.4 Forschungsstand zu Feature-Fusion (Linguistik + Psychometrie)
+Gibt es ähnliche Arbeiten?
+
+
+
+Forschungslücke aufzeigen
+
+
+
+4. Dataset & Preprocessing
+Übersicht über verwendete Datensätze (PJ, PAN12, NPS Chat)
+
+Data Cleaning (Slang, Tokenisierung, Labeling, Speaker-Anonymisierung)
+
+Balancing & Augmentation (z. B. Backtranslation, Sampling)
+
+Feature Extraction:
+
+LIWC-Profilierung
+
+RoBERTa-Embeddings
+
+
+
+
+
+
+5. Methodology
+Baseline-Modelle (RoBERTa, evtl. SVM/TF-IDF)
+
+Hybrid-Modell: Feature-Fusion von RoBERTa + LIWC
+
+Architekturen: einfache Concatenation, gewichtete Features
+
+Ablation Studies (z. B. ohne Emotion, ohne Pronomen etc.)
+
+Technische Details (Hyperparameter, Libraries, Trainingsumgebung)
+
+
+
+
+6. Evaluation
+Metriken: Precision, Recall, F1, ROC-AUC
+
+Modelle im Vergleich: Baseline vs. Hybrid
+
+Fehleranalyse (False Positives/Negatives mit Beispiel)
+
+SHAP/LIME zur Erklärung von Predictions
+
+Interpretierbarkeit der Features (psychometrische vs. linguistische Relevanz)
+
+
+
+
+7. Discussion
+Interpretation der Ergebnisse
+
+Beitrag zur Forschung
+
+Stärken & Schwächen des Ansatzes
+
+Limitationen (z. B. überrepräsentierte Slang-Formen, ethnische Bias, Label-Unsicherheit)
+
+
+
+
+8. Conclusion & Outlook
+Kurze Zusammenfassung der Arbeit
+
+Was wurde erreicht?
+
+Ausblick auf künftige Arbeiten (z. B. Mehrsprachigkeit, andere Plattformen, Deep Feature Attention etc.)
+
+Anhang
+Zusatzplots, Tabellen
+
+Beispielchats (anonymisiert)
+
+LIWC-Kategorien
+
+Quellcode (Verweis auf GitHub, falls vorhanden)
+

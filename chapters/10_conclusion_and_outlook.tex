@@ -1,0 +1,146 @@
+\section{Limitations}
+
+
+
+There are several limitations within the study that need to be addressed. Firstly, the limitations of using decoy victim data from
+Perverted Justice should be considered. Such interactions are designed to result in an arrest, meaning a decoy may be more compliant
+and open to explicit talk than an adolescent victim. However, studies have shown that the adult leads these interactions, using higher
+frequencies of words (Drouin, Ryan et al., 2017) and directing the conversation to offline contact (Winters et al., 2017). Research has
+also shown that individuals often have previous offences for child pornography and similar grooming offences against actual children
+(Mitchell, Wolak, \& Finkelhor, 2005) \cite{broome2020psycholinguistic}
+
+
+
+%%%% Wichtige Punkte!
+
+%Die Daten sind nicht ganz natürlich (hier bitte studien aufzeigen, die zeigen dass decoys anders reagieren als echte Opfer), aber es gibt Studien die zeigen, dass Täter die Interaktionen leiten und decoys oft kooperativer sind (z. B. Drouin, Ryan et al., 2017; Winters et al., 2017; Mitchell, Wolak, \& Finkelhor, 2005)​
+
+% Daten sind über 10 Jahre alt, Sprache und Slang haben sich wahrscheinlich bereits weiterentwickelt
+
+%% Für liwc musste komplettes slang handling gemacht werden, was sehr aufwendig war -> in echt ändert sich slang ständig, liwc müsste immer wieder angepasst werden und wenn man in real time grooming detection ist bräcuchte man nen anderen slang handling ansatz (z. B. embeddings für unbekannte wörter, die kontext berücksichtigen)
+
+%% balanced dataset entspricht nicht der realität wo nur ein kleiner teil der chats grooming sind. 
+
+%% SHAP ist computational sehr aufwendig, vor allem bei vielen features (hier 118 bzw. 49) -> in echt bräuchte man effizientere Methoden zur Merkmalsauswahl und -reduktion, um die Analyse durchführbar zu machen. Außerdem konnten dadurch nur 64 samples erklärt werden, was die generalisierbarkeit der erklärungen einschränkt
+
+% Die Daten sind nur in Englisch, was die Generalisierbarkeit auf andere Sprachen einschränkt. Cybergrooming findet aber auch in anderen Sprachen statt, was den Bedarf an nicht-englischen Trainingsdatensätzen unterstreicht. Die Erweiterung der Forschung auf mehrsprachige Datensätze würde eine umfassendere Bewertung von Cybergrooming-Erkennungstechniken ermöglichen, einschließlich der Wirksamkeit unserer Backtranslation-Augmentierung.
+
+% Generell ist die Datenmenge sehr begrenzt, vor allem die positiven Beispiele. Es gibt nur wenige öffentlich zugängliche Datensätze, und diese sind oft klein und unausgewogen. Dies erschwert das Training robuster Modelle und die Generalisierbarkeit der Ergebnisse. 
+
+%Aufgrund der begrenzten Menge war in dieser Arbeit Domain Leakage ein Thema, das adressiert werden musste. Es ist wichtig, dass Trainings- und Testdaten strikt getrennt sind, um eine realistische Bewertung der Modellleistung zu gewährleisten. In zukünftigen Arbeiten sollten größere und vielfältigere Datensätze verwendet werden, um Domain Leakage zu minimieren und die Generalisierbarkeit zu verbessern.
+
+%% 512 token limit von BERT!! wir haben nicht immer die komplette konversation, sondern nur einen Ausschnitt. Wir haben versucht das durch chunking zu adressieren, aber es ist nicht perfekt. 
+
+%%% We trained for a fixed three epochs without early stopping; hence, residual overfitting cannot be excluded and should be addressed in future work via dev-based early stopping, learning-curve monitoring, group-stratified cross-validation, and out-of-domain tests.
+
+%% Was der PAN12 datensatz gut adressiert, bei mir aber nicht der fall war, ist dass im real life grooming chats nur einen sehr kleinen teil aller chats ausmachen. In meinem Datensatz sind ungefähr 30% der chats grooming, im echten leben ist das viel weniger. Das macht die Erkennung schwieriger, weil das modell viel mehr negative beispiele sehen wird und es schwieriger wird, die positiven zu erkennen.
+%% trotzdem lag bei mir der fokus erstmal darauf, die psycholinguisitsichen Merkmale zu nutzen um die Erkennung zu verbessern, anstatt mich auf das unbalancing zu konzentrieren. In zukünftigen Arbeiten könnte man sich stärker auf Techniken zur Bewältigung von Klassenungleichgewichten konzentrieren, um die Erkennung von Grooming-Verhalten zu optimieren.
+
+
+\section{Future Work}
+
+%%%% Zukünftige Arbeiten könnten hierarchische Modelle oder Long-Context-Transformer verwenden, um längere Kontexte zu erfassen anstatt der 512 BERT Grenze.
+
+%%% Zuünftige Arbeiten könnten sich auf die frühe Erkennung konzentrieren, also darauf, Grooming-Verhalten in frühen Phasen zu identifizieren, bevor die Konversation eskaliert und vielleicht
+%%% analysieren welche LIWC Merkmale in welchen Phasen wichtig sind (das hat schonmal einer gemacht, müsste ich nochmal raussuchen) aber das hier dann auch mit einem ML Modell kombinieren
+
+%% Hierfür bräuchte man aber natürlich einen Datensatz der Phasen sauber modelliert (Chatcoder2 z. B. hat 3 Phasen, aber ist sehr klein)
+
+%%% Early to mid fusion ausporbieren denkbar
+
+%% Data augmentation könnte für mehr model robustheit sorgen (z. B. synonym replacement, random insertion, random swap, random deletion, backtranslation etc, vielleicht könnte geschaut werden inwieweit sich hier die relevanten LIWC Merkmale verändern)
+
+%%% Arbeit natürlich auch auf andere Sprachen ausweiten -> LIWC existiert auch für andere Sprachen, aber müsste dann auch wieder an den Slang angepasst werden
+
+%% Es wurde ja bereits erwähnt, dass RoBERTa und DeBERTa v3 leistungsfähigere Alternativen zu BERT sind. Zukünftige Arbeiten könnten diese Modelle als Baseline verwenden und untersuchen, ob die Integration von LIWC-Features auch hier zu Verbesserungen führt. Allerdings sollte man hier beachten
+%%% dass diese modelle auf einen deutlich breiteren corpus trainiert wurden der eventuell den pan12 datensatz enthalten hat.
+
+%%% Feature fusion von anderen Arten von ML Modellen und LIWC wäre auch interessant (z. B. LSTM, CNN, etc.)
+
+%%% Meinen Ansatz auf den PAN12 Datensatz anwenden, um die Ergebnisse vergleichbar zu machen mit anderen Arbeiten allerdings müssten wir hier wieder slang handling machen um die maximalen linguistischen Informationen rauszuholen
+
+%% Sehr spannend wäre ein model, was basierend auf den LIWC Kategorien die Phasen zuordnet (folgend nach einen der vorgestellten Modelle)
+
+%%%%% The main limitation of this study lies in the benchmark dataset, pan, which is solely in English. This
+%restricts the generalizability of our findings to other
+%languages. We acknowledge that online grooming occurs across other languages, highlighting the
+%critical need for non-English training datasets. Expanding research to include multilingual datasets
+%would allow for a more comprehensive evaluation
+%of online grooming detection techniques, including
+%the effectiveness of our backtranslation augmentation. Additionally, the victims in pan are trained
+%adult decoys rather than actual minors, which may
+%affect the quality and reliability of results. Finally,
+%while the ultimate objective of online grooming detection is to identify predators before they can harm
+%potential victims, our study requires the entire conversation for classification. In future work, we plan
+%to focus on the task of early detection, that is, identifying grooming behaviors at early stages based
+%on the first few messages before the conversation
+%escalates into serious exploitation or abuse
+
+
+
+%Phasen-Klassifikation (mehrstufig nach Grooming-Phase): Theoretisch durchläuft ein Grooming-Versuch verschiedene Stadien (z. B. nach O’Connell: Anbahnung/Freundschaft, Beziehungsaufbau, Risikoprüfung, sexuelle Phase). Es klingt attraktiv, ein Modell zu bauen, das diese Feinabstufungen erkennt – etwa um frühzeitig Alarm zu schlagen, wenn es noch in Phase 1–2 ist. Allerdings ist dies in der Praxis weit schwieriger umzusetzen:
+
+
+%Keine vorhandenen Labels: Die öffentlichen Datensätze enthalten keine Phasen-Labels, sondern nur Gesamturteile pro Chat. Es gibt also keinen großen Korpus, wo jede Nachricht oder jeder Abschnitt mit „Phase 1/2/3/4“ markiert ist. Eine Ausnahme ist der ChatCoder2-Datensatz mit drei definierten Phasen (Austausch von persönlichen Informationen, Grooming, Annäherung ans Opfer)​
+%aclanthology.org
+
+%Hoher Annotatonsaufwand: Um Phasenklassifikation zu betreiben, müsste man selbst die vorhandenen Grooming-Chats nachannotieren – d. h. festlegen, ab welcher Zeile Phase 1 endet, wo Phase 2 beginnt etc., für jeden Chat. Das erfordert Expertenwissen und ist zeitaufwändig. Die Grenzen zwischen den Phasen sind oft fließend und subjektiv: nicht jeder Täter durchläuft die Phasen klar in Reihenfolge, manche steigen direkt sexuell ein​
+%medium.com
+
+
+%, andere halten Smalltalk über viele Nachrichten. Selbst menschliche Annotatoren bräuchten klare Richtlinien und würden vermutlich uneinheitlich labeln, was Konsistenzprobleme schafft. In 5 Monaten Projektzeit ist eine zuverlässige Phasen-Annotation von hunderten Chats kaum zu bewältigen.
+%Datenmenge pro Klasse: Eine mehrstufige Klassifikation würde die ohnehin kleine Menge an positiven Fällen auf mehrere Klassen aufteilen. Jede Phase wäre eine eigene Klasse, die genug Trainingsbeispiele bräuchte. Wenn z. B. die meisten Chats die sexuelle Phase erreichen, aber weniger Chats einen Abbruch in Phase 2 zeigen, wären die Klassen sehr unausgewogen. Das verschärft das Datenproblem weiter und könnte dazu führen, dass einige Phasen vom Modell kaum gelernt werden (weil zu wenige Beispiele).
+%Modelldesign-Komplexität: Soll die Phase pro Nachricht erkannt werden (Sequenz-Labeling) oder pro Gesamtdialog (klassifizieren nach „dominierender Phase“)? Beides hat Tücken. Pro Nachricht zu labeln erfordert viel Kontext (eine einzelne Chat-Nachricht ist oft zu kurz und mehrdeutig​
+%medium.com
+%) – man müsste also sequentielle Modelle oder Fenster über den Dialog konstruieren. Eine pauschale Phasenangabe pro Chat wiederum geht verloren, wenn ein Chat mehrere Phasen durchläuft. Beispielsweise: Ein Chat beginnt in Phase 1 und endet in Phase 4 – welche Klasse würde man dem ganzen Chat geben? Das wäre schwer zu definieren (evtl. „letzte erreichte Phase“, aber das ist willkürlich als Label).
+
+
+
+
+
+
+
+\begin{comment}
+   
+    -> Chat hat sich im Verlauf der jahre verändert und ist ein laufender prozess
+
+
+
+    Trotz der bekannten Einschränkungen durch das 512-Token-Limit klassischer Transformer-Modelle wurde im Rahmen dieser Arbeit ein Sliding-Window-Ansatz gewählt, ergänzt durch psycholinguistische LIWC-Features pro Segment. Die Kombination ermöglicht eine lokal-semantische und zugleich psychometrisch angereicherte Erkennung manipulativer Sprachmuster.
+Zukunftsweisende Ansätze wie hierarchische Modelle oder Long-Context-Transformer stellen potenziell leistungsfähigere Alternativen dar, wären jedoch mit erheblichem zusätzlichem Implementierungsaufwand verbunden, der den Rahmen dieser Arbeit überschreiten würde.
+\end{comment}
+
+
+\begin{comment}
+
+
+\subsection{Remaining Challenges in automated Cybergrooming Detection}
+
+\subsection{Remaining Challenges in Cybergrooming Detection}
+
+Despite notable advances, the automated detection of online grooming remains a complex task. Challenges include the informal and fragmented nature of online chats, the gradual and manipulative structure of grooming conversations, and the difficulty of identifying the predator in anonymized interactions \parencite{schlaepfer2022online, gupta2012characterizingpedophileconversationsinternet}. Moreover, the need to detect abusive intent early—while minimizing false positives—raises ethical concerns, particularly in high-stakes child protection contexts \parencite{vogt2021early}.
+
+Addressing these challenges requires models that are both linguistically robust and contextually aware. In the following, recent Transformer-based language models are explored as a foundation for capturing the nuanced dynamics of grooming. Subsequently, the integration of psycholinguistic profiling through LIWC is examined as a means to enhance interpretability and behavioral insight in detection systems.
+
+
+The automated detection of online grooming remains a highly complex and ethically sensitive task. Several linguistic, behavioral, and technical challenges hinder the development of accurate and timely detection systems. 
+
+First, the informal nature of online communication presents significant obstacles. Chats often contain grammatical and typographical errors, emoticons, abbreviations, and non-standard language that complicate traditional natural language processing techniques \cite{bours2023,}. Furthermore, conversations typically span over long periods and consist of non-contiguous exchanges, making it difficult to establish consistent behavioral patterns \cite{schlaepfer2022online}. 
+
+Second, grooming conversations evolve in distinct phases—starting with trust-building and benign exchanges, and gradually progressing toward sexual topics and manipulation. This staged approach makes early detection difficult, as the initial messages often resemble harmless conversations between peers \cite{vogt2021early,schlaepfer2022online}. In fact, critical indicators such as isolation tactics or age-related probing may only appear much later in the interaction \cite{vogt2021early}. The need to balance early intervention with false alert minimization poses an additional ethical dilemma: triggering alerts too early may lead to false accusations, while delaying them can result in missed interventions \cite{vogt2021early}. 
+
+Third, the anonymity of online platforms exacerbates the issue. Predators often impersonate minors and mimic their writing style, making it difficult to distinguish between consensual adult interactions and exploitative conversations \cite{schlaepfer2022online}. Moreover, models must be able to detect not just whether grooming is occurring, but also which user is the predator and which messages are indicative of abusive behavior \cite{cardei}.
+
+Finally, significant non-technical challenges exist. The acquisition of high-quality, real-world datasets is constrained by legal, ethical, and privacy concerns \cite{schlaepfer2022online}. Most available corpora require extensive manual annotation, which is labor-intensive and error-prone \cite{gupta2012characterizingpedophileconversationsinternet}. Differences in chat formats across platforms and the necessity of anonymization further complicate data preprocessing and model development \cite{gupta2012characterizingpedophileconversationsinternet}.
+
+Together, these factors illustrate the intricate and multi-faceted nature of automated online grooming detection. Effective systems must be robust across linguistic variability, temporally aware, ethically grounded, and technically adaptable.
+
+
+Recent advances in natural language processing, particularly the emergence of transformer-based models such as BERT and DeBERTa v3, offer promising solutions to many of the aforementioned challenges. These models excel at capturing long-range dependencies and contextual nuances in unstructured text, making them well-suited for the dynamic and subtle nature of grooming conversations. In the following sections, relevant transformer architectures and outline will be proposed
+
+
+
+    
+\end{comment}
+
+

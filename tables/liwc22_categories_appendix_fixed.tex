@@ -1,0 +1,146 @@
+% Voraussetzung im Präambel (hast du schon):
+% \usepackage{booktabs,array,longtable,ragged2e}
+
+\begingroup
+\scriptsize
+\setlength{\LTcapwidth}{\linewidth}
+\setlength\LTleft{0pt}% flush in den Textblock
+\setlength\LTright{0pt}
+
+\begin{longtable}{@{}%
+  >{\RaggedRight\arraybackslash}p{0.28\linewidth}%
+  >{\RaggedRight\arraybackslash}p{0.18\linewidth}%
+  % dritte Spalte = Restbreite MINUS die 4\tabcolsep der Zwischenräume
+  >{\RaggedRight\arraybackslash}p{\dimexpr
+      \linewidth - 0.28\linewidth - 0.18\linewidth - 4\tabcolsep\relax}%
+@{}}
+
+\caption[LIWC-22 categories with abbreviations and exemplar words.]%
+{\textbf{LIWC-22 categories with abbreviations and exemplar words.} 
+ \emph{Adapted from} Boyd et al.~\cite{pennebaker2022liwc}.}
+\label{tab:liwc22-categories}\\
+
+\toprule
+\textbf{Category} & \textbf{Abbrev.} & \textbf{Word Examples} \\
+\midrule
+\endfirsthead
+
+\toprule
+\textbf{Category} & \textbf{Abbrev.} & \textbf{Word Examples} \\
+\midrule
+\endhead
+
+\midrule
+\multicolumn{3}{@{}r@{}}{\emph{Continued on next page}}\\
+\bottomrule
+\endfoot
+
+\bottomrule
+\endlastfoot
+Linguistic & linguistic & General linguistic markers \\
+Total function words & function & the, to, and, I \\
+Total pronouns & pronoun & I, you, that, it \\
+Personal pronouns & ppron & I, you, my, me \\
+1st person singular & i & I, me, my, myself \\
+1st person plural & we & we, our, us, lets \\
+2nd person & you & you, your, u, yourself \\
+3rd person singular & shehe & he, she, her, his \\
+3rd person plural & they & they, their, them, themsel* \\
+Impersonal pronouns & ipron & that, it, this, what \\
+Determiners & det & the, at, that, my \\
+Articles & article & a, an, the, alot \\
+Numbers & number & one, two, first, once \\
+Prepositions & prep & to, of, in, for \\
+Auxiliary verbs & auxverb & is, was, be, have \\
+Adverbs & adverb & so, just, about, there \\
+Conjunctions & conj & and, but, so, as \\
+Negations & negate & not, no, never, nothing \\
+Common verbs & verb & is, was, be, have \\
+Common adjectives & adj & more, very, other, new \\
+Quantities & quantity & all, one, more, some \\
+Drives & Drives & we, our, work, us \\
+Affiliation & affiliation & we, our, us, help \\
+Achievement & achieve & work, better, best, working \\
+Power & power & own, order, allow, power \\
+Cognition & Cognition & is, was, but, are \\
+All-or-none & allnone & all, no, never, always \\
+Cognitive processes & cogproc & but, not, if, or, know \\
+Insight & insight & know, how, think, feel \\
+Causation & cause & how, because, make, why \\
+Discrepancy & discrep & would, can, want, could \\
+Tentative & tentat & if, or, any, something \\
+Certitude & certitude & really, actually, of course, real \\
+Differentiation & differ & but, not, if, or \\
+Memory & memory & remember, forget, remind, forgot \\
+Affect & Affect & good, well, new, love \\
+Positive tone & tone\_pos & good, well, new, love \\
+Negative tone & tone\_neg & bad, wrong, too much, hate \\
+Emotion & emotion & good, love, happy, hope \\
+Positive emotion & emo\_pos & good, love, happy, hope \\
+Negative emotion & emo\_neg & bad, hate, hurt, tired \\
+Anxiety & emo\_anx & worry, fear, afraid, nervous \\
+Anger & emo\_anger & hate, mad, angry, frustr* \\
+Sadness & emo\_sad & :(, sad, disappoint*, cry \\
+Swear words & swear & shit, fuckin*, fuck, damn \\
+Social processes & Social & you, we, he, she \\
+Social behavior & socbehav & said, love, say, care \\
+Prosocial behavior & prosocial & care, help, thank, please \\
+Politeness & polite & thank, please, thanks, good morning \\
+Interpersonal conflict & conflict & fight, kill, killed, attack \\
+Moralization & moral & wrong, honor*, deserv*, judge \\
+Communication & comm & said, say, tell, thank* \\
+Social referents & socrefs & you, we, he, she \\
+Family & family & parent*, mother*, father*, baby \\
+Friends & friend & friend*, boyfriend*, girlfriend*, dude \\
+Female references & female & she, her, girl, woman \\
+Male references & male & he, his, him, man \\
+Culture & Culture & car, united states, govern*, phone \\
+Politics & politic & united states, govern*, congress*, senat* \\
+Ethnicity & ethnicity & american, french, chinese, indian \\
+Technology & tech & car, phone, comput*, email* \\
+Lifestyle & lifestyle & work, home, school, working \\
+Leisure & leisure & game*, fun, play, party* \\
+Home & home & home, house, room, bed \\
+Work & work & work, school, working, class \\
+Money & money & business*, pay*, price*, market* \\
+Religion & relig & god, hell, christmas*, church \\
+Physical & physical & medic*, food*, patients, eye* \\
+Health & health & medic*, patients, physician*, health \\
+Illness & illness & hospital*, cancer*, sick, pain \\
+Wellness & wellness & healthy, gym*, supported, diet \\
+Mental health & mental & mental health, depressed, suicid*, trauma* \\
+Substances & substances & beer*, wine, drunk, cigar* \\
+Sexual & sexual & sex, gay, pregnan*, dick \\
+Food & food & food*, drink*, eat, dinner* \\
+Death & death & death*, dead, die, kill \\
+States & states & short-term internal states that drive or inhibit behavior \\
+Need & need & have to, need, had to, must \\
+Want & want & want, hope, wanted, wish \\
+Acquire & acquire & get, got, take, getting \\
+Lack & lack & don’t have, didn’t have, *less, hungry \\
+Fulfilled & fulfill & enough, full, complete, extra \\
+Fatigue & fatigue & tired, bored, don’t care, boring \\
+Motives & motives & broad motivational drives \\
+Reward & reward & opportun*, win, gain*, benefit* \\
+Risk & risk & secur*, protect*, pain, risk* \\
+Curiosity & curiosity & scien*, look* for, research*, wonder \\
+Allure & allure & have, like, out, know \\
+Perception & Perception & in, out, up, there \\
+Attention & attention & look, look* for, watch, check \\
+Motion & motion & go, come, went, came \\
+Space & space & in, out, up, there \\
+Visual & visual & see, look, eye*, saw \\
+Auditory & auditory & sound*, heard, hear, music \\
+Feeling (perceptual) & feeling & feel, hard, cool, felt \\
+Time orientation & time\_orient & temporal focus variables \\
+Time & time & when, now, then, day \\
+Past focus & focuspast & was, had, were, been \\
+Present focus & focuspresent & is, are, I’m, can \\
+Future focus & focusfuture & will, going to, have to, may \\
+Conversational & Conversation & yeah, oh, yes, okay \\
+Netspeak & netspeak & :), u, lol, haha* \\
+Assent & assent & yeah, yes, okay, ok \\
+Nonfluencies & nonflu & oh, um, uh, i i \\
+Fillers & filler & rr*, wow, sooo*, youknow \\
+\end{longtable}
+\endgroup

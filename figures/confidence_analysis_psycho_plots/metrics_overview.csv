@@ -1,0 +1,2 @@
+n_samples,delta_mean,delta_median,delta_std,delta_p10,delta_p90,class_0_count,class_1_count,flipped_count,flip_rate,acc_with_liwc,acc_without_liwc,acc_delta,n_with_labels
+6849,0.02194121632720105,0.03125,0.025574442677048694,-0.001953125,0.04541015625,3942,2907,9,0.001314060446780552,0.9299167761717039,0.9309388231858665,-0.0010220470141626414,6849

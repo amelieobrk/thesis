@@ -1,0 +1,19 @@
+\begin{table}[H]
+\centering
+\small
+\caption[Evaluation for Chunk Size 512, Separated Split]{\textbf{Evaluation for chunk size 512, separated split (synthetic data only in train). }}
+\label{tab:512_separated}
+\begin{tabular}{@{}lrrrr rr@{}}
+\toprule
+  & \multicolumn{5}{c}{\textbf{All}} 
+  & \multicolumn{1}{c}{\textbf{Synth-only}} \\
+\cmidrule(lr){2-6} \cmidrule(lr){7-7} 
+Step (Epoch) & Loss & Accuracy & Precision & Recall & \textbf{F1} & Accuracy \\
+\midrule
+3000 (0.78) & 0.472 & 0.894 & 0.690 & 0.989 & \textbf{0.813} & 0.186 \\
+6000 (1.55) & 0.517 & 0.883 & 0.668 & 0.987 & \textbf{0.797} & 0.092 \\
+9000 (2.33) & 0.518 & 0.885 & 0.670 & 0.994 & \textbf{0.800} & 0.116 \\
+11610 (3.00) & 0.534 & 0.885 & 0.670 & 0.994 & \textbf{0.801} & 0.093 \\
+\bottomrule
+\end{tabular}
+\end{table}

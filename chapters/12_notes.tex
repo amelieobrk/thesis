@@ -1,0 +1,134 @@
+%%%%%%%%%%%%
+ \parencite{salminen2025fakereviews} nutzten LIWC zur Erkennung manipulativer Sprache in Fake Reviews -- ein Ansatz, der sich auf Grooming übertragen lässt.
+
+ %%%%%%%%
+Es gibt bereits einige Forschungsarbeiten, welchemoderne Transformer-basierte Sprachmodelle für die textbasierte Erkennung von Grooming untersuchen und sie mit klassischen Methoden vergleichen (z.B.  \cite{street2024grooming}; \cite{leiva2025meta})Außerdem wird erforscht, inwiefern psycholinguistische Merkmale, welche unter Anderem durch LIWC erfasst werden, weitere Einblicke liefern und die Erkennungsgenauigkeit steigern können (z.B. Fake-Review Erkennung; \cite{salminen2025fakereviews}). 
+
+
+\begin{comment}
+    First, high-level features are crucial for detecting online grooming, including emotional markers, fixated discourse, and deceptive behavior, significantly improving accuracy in distinguishing grooming from other interactions (Ashcroft et al., 2015; Bogdanova et al., 2014; Kim et al., 2020). Computational research trends show a shift toward deep learning-based models, particularly recurrent neural networks (RNNs) and transformer architectures, which process sequential chat data with better contextual understanding.  \cite{an2025cybergrooming}
+\end{comment}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ So berichten \emph{Street et al. (2024)}\footnote{\url{https://arxiv.org/html/2409.07958v1}} in einer aktuellen Studie, dass RoBERTa auf dem PAN12-Datensatz bis zu 14\% bessere Erkennungsraten als klassische Modelle erreicht. Auch \emph{Borj et al. (2023)} demonstrieren die Leistungsfähigkeit von kontrastivem Lernen mit RoBERTa-Embeddings. Transformer-Modelle sind in der Lage, \emph{Kontext und sprachliche Subtilitäten} zu erfassen – ein zentraler Vorteil bei der Detektion früher Grooming-Phasen.
+%%%%%%%%%
+\begin{table}[h]
+\centering
+\begin{tabular}{@{}p{4cm}p{3cm}p{6cm}@{}}
+\toprule
+\textbf{Studie} & \textbf{Quelle} & \textbf{Erkenntnisse} \\
+\midrule
+Street et al. (2024) & arXiv & Transformer + Kontextmodellierung; F1 bis 0{,}96 auf PAN12, Transformer outperformt NB/SVM deutlich \\
+Borj et al. (2023) & ACM Workshop & Kontrastive RoBERTa-Embeddings zur Früherkennung von Grooming-Strategien \\
+Leiva-Bianchi et al. (2025) & Scientific Reports & Meta-Analyse zeigt Trend zu Deep Learning; Transformer-Modelle liefern beste Resultate in subtilen Kontexten \\
+\bottomrule
+\end{tabular}
+\caption{Wichtige Arbeiten zu Transformer-basierter Grooming-Erkennung}
+\end{table}
+%%%%%%%%%%%%
+Klassische Verfahren wie SVM+TFIDF liefern oft solide Baselines, wie u.a. in \parencite{inches2012pan} oder der Meta-Analyse von \parencite{leiva2025meta} dargestellt. Transformer-Modelle zeigen jedoch signifikante Leistungssteigerungen, insbesondere in Recall und Kontextsensitivität. 
+%%%%%%%%%
+Neuere Ansätze verwenden \textbf{Transformer-Modelle} wie BERT oder RoBERTa. Gleichzeitig gewinnen psycholinguistische Merkmale, etwa durch LIWC extrahiert, an Bedeutung.
+% Vergleichbare Arbeiten, Forschungslücken
+%Was wurde bisher zu Grooming Detection gemacht?
+\subsection{Transformer-based Grooming Detection}
+
+
+
+
+%%%%% Hier musst du darstellen wie das mit dem Sliding window ist:
+
+%%%  Eine Studie zur Forensik von Chats spaltete Chatlogs in 512-Token-Blöcke und kombinierte anschließend die Ergebnisse, stellte aber fest, dass die Block-für-Block-Analyse die globale Sicht einschränken kann \cite{ Detecting Relevant Information in High-Volume Chat Logs: Keyphrase Extraction for Grooming and Drug Dealing Forensic Analysis Jeovane Honorio Alves }
+
+
+%%%% Leistungsfähiger sind hierarchische Modellierungsansätze: Dabei wird die Konversation zunächst in kleinere Einheiten (z. B. einzelne Nachrichten oder Abschnitte) zerlegt. Jede Einheit wird durch ein Sprachmodell (wie BERT/DeBERTa) in einen Embedding-Vektor überführt. Anschließend verarbeitet ein übergeordnetes Modell (etwa ein RNN oder Transformer) die Sequenz dieser Embeddings, um eine Entscheidung für die gesamte Unterhaltung zu treffen. Ein aktuelles System namens Osprey folgt diesem Ansatz: Jede Chat-Nachricht wird durch einen vortrainierten Transformer encodiert, und ein GRU-Netzwerk verarbeitet die Sequenz dieser Embeddings zusammen mit Konversations-Metadaten (Anzahl Teilnehmer, Zeitabstände etc.), um Grooming-Gespräche zu erkennen
+
+
+
+%%%% Alternativ werden Long-Document Transformer-Modelle entwickelt (z. B. Longformer, BigBird), doch speziell für Grooming-Erkennung sind deren Anwendungen noch begrenzt. Ein weiterer innovativer Ansatz sind Memory-augmented Models, bei denen ein externes Gedächtnis relevanten Verlauf speichert und bei Bedarf abruft. Solche Methoden können die Kontextlänge durch Retrieval früherer Chat-Inhalte effektiv verlängern  Insgesamt gilt: Durch geschicktes Segmentieren und Zusammenführen von Teilkonversationen (Slides, Chunks) lässt sich die 512-Token-Barriere überwinden, ohne kritische Hinweise im langen Gesprächsverlauf zu verlieren.
+arxiv.org
+
+Transformer-Modelle wie \textbf{BERT} und \textbf{RoBERTa} zeigen in aktuellen Studien eine überlegene Leistung bei der Erkennung von Online-Grooming, vor allem wenn sie mit Kontextinformationen kombiniert werden. Studien wie \parencite{street2024grooming} belegen F1-Werte von bis zu 0{,}96 mit RoBERTa. Ein Survey von \parencite{rezaee2022survey} zeigt die Entwicklung von regelbasierten Methoden hin zu modernen Deep-Learning-Ansätzen. \parencite{borj2023contrastive} schlagen eine kontrastive Chat-Embedding-Methode vor, die frühe Grooming-Anzeichen identifiziert.
+
+In sicherheitskritischen Anwendungen ist \textbf{Erklärbarkeit} entscheidend. \parencite{mehta2021liwcbert} und \parencite{mbaziira2023shap} nutzen \textbf{SHAP}, um LIWC-basierte Modelle zu interpretieren. \parencite{shahzad2024hateinsights} kombinieren SHAP und LIME zur Erklärung von Hate-Speech-Modellen. Solche Verfahren lassen sich auch auf Grooming-Detection übertragen.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|p{4cm}|p{3cm}|p{7cm}|}
+\hline
+\textbf{Autor:innen (Jahr)} & \textbf{Quelle} & \textbf{Kernbeitrag} \\
+\hline
+Street et al. (2024) & arXiv & Kontextuelles RoBERTa-Modell mit F1 bis 0{,}96 \\
+\hline
+Borj et al. (2023) & ACM Workshop & Kontrastive Embeddings zur Früherkennung \\
+\hline
+Rezaee Borj et al. (2022) & Knowledge-Based Systems & Übersicht über 33+ Methoden; Trend zu Transformers \\
+\hline
+Aarnseth (2023) & Dissertation & BERT-Feintuning auf Grooming-Chats \\
+\hline
+\end{tabular}
+\caption{Ausgewählte Arbeiten zur Transformer-basierten Grooming Detection}
+\end{table}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%Linguistische Merkmale nach Broome, kann man auf jeden Fall schon verwenden%%%%%%%%%%%%%%%%%%%%
+
+\subsection{LIWC-Based Psycholinguistic Analysis of Cyber Grooming}
+
+
+
+%%%%% Bereits frühere Arbeiten integrierten LIWC-Feature (Linguistic Inquiry and Word Count) – z. B. Häufigkeiten bestimmter Wortkategorien – mit klassischen Features, um Pädophilen in Chats aufzuspüren %%%%
+
+%%%%%% bringe hier noch das Werk von Gupta et. al und von Cano et. al ein !!!!!!!!
+
+%% Gupta et al.: interpersonal and tentative cues are predictive
+
+%%% Cano et al Cano et al.: interpretable features improve ML transparency
+
+\begin{comment}
+    . Cano et al. (2020)
+→ Ja, explizite LIWC-Nutzung.
+
+Verwendeten LIWC-Features als Input für maschinelle Lernverfahren zur Grooming-Erkennung.
+
+Ziel: Modellleistung und Interpretierbarkeit verbessern.
+
+Zeigten, dass affektive und kognitive LIWC-Kategorien besonders wertvoll sind.
+
+�� Fazit: LIWC ist integraler Bestandteil der Feature-Engine.
+\end{comment}
+
+Recent linguistic studies such as \parencite{black2015linguistic} have shown that specific language patterns are associated with different grooming stages. These include an increased use of imperative verbs, flattery, and second-person pronouns. Understanding these stages is essential for computational models aiming to detect grooming behavior, as it provides a structural framework to identify subtle patterns of manipulation over time.
+
+
+%%%%% Hier kommt dann Broome
+
+One of the most comprehensive studies on the psycholinguistic structure of online grooming was conducted by Broome et al.~\cite{broome2020psycholinguistic}. The aim of the study was to create a linguistic profile of adults who use online communication to sexually groom minors. The authors analyzed 65 chat logs taken from the Perverted-Justice dataset, all of which involved offenders convicted of online sexual offenses.
+
+The research followed a mixed-methods design. Initially, focus groups were conducted with experts in online child sexual exploitation (police and prison staff), who were asked to identify relevant linguistic features of grooming behavior based on their professional experience. Participants were presented with the full list of categories from the \textit{Linguistic Inquiry and Word Count (LIWC)} tool, a well-established text analysis program for quantifying psychological and emotional dimensions of language~\cite{pennebaker2015liwc}. LIWC categories endorsed by at least 45\% of the participants were selected for subsequent quantitative analysis.
+
+The second phase involved a LIWC-based analysis of the chat corpus. Results showed that grooming conversations were characterized by a high frequency of words related to \textit{affective processes} (e.g., ``love'', ``sweet''), \textit{social processes} (e.g., ``friend'', ``girl''), \textit{cognitive processes} (e.g., ``think'', ``maybe''), and \textit{informal language} (e.g., ``lol'', ``ok''). Additionally, there was a strong focus on present-tense communication and a generally positive emotional tone. Contrary to expectations, sexual and body-related terms (\textit{biological processes}) occurred far less frequently—even during the so-called ``sexual gratification'' phase.
+
+These findings challenge the commonly held assumption that grooming is primarily marked by overtly sexual content. Instead, the study suggests that offenders often aim to establish emotional closeness through seemingly authentic and socially engaging communication. This is supported by high values in LIWC summary dimensions such as \textit{clout} (dominance/confidence) and \textit{emotional tone} (positive affect). Broome et al.~\cite{broome2020psycholinguistic} argue that grooming may not always involve deceptive intent; in some cases, the offender’s communication may reflect a perceived genuine desire for emotional connection.
+
+
+
+
+
+\subsection{Feature-Fusion: Linguistische und psychometrische Merkmale}
+
+%Beispiele aus der Literatur (z. B. LIWC+BERT für Persönlichkeit)
+
+Die Kombination von Transformer-Embeddings mit LIWC-Merkmalen kann sowohl tiefere Sprachkontexte als auch interpretierbare psychologische Informationen nutzen. \parencite{mehta2021liwcbert} zeigen, dass ein BERT+LIWC-Modell bei der Persönlichkeitserkennung besser abschneidet als Einzelmodelle. \parencite{rhouma2025worry} und \parencite{liu2023bliwcuda} belegen die Vorteile dieser Fusion auch in anderen Anwendungsbereichen.
+%Welche Modelle, Features, Datensätze?
+%Wo ist deine Forschungslücke?
+
+\begin{quote}
+Fazit: Die Kombination von Transformer-Modellen mit LIWC-Merkmalen stellt eine vielversprechende Strategie zur Verbesserung der Erkennungsgenauigkeit und Interpretierbarkeit in der Grooming-Erkennung dar. Die hier gesichtete Literatur belegt die Leistungsfähigkeit hybrider Modelle und die Relevanz psycholinguistischer Features für Sicherheitsanwendungen im NLP.
+
+
+Die Literatur seit 2020 zeigt deutlich: Die \textbf{Kombination von RoBERTa und LIWC} bietet großes Potenzial, um Grooming noch präziser und erklärbarer zu erkennen. Transformer-Modelle erfassen komplexe sprachliche Muster, während LIWC zusätzlich psychologische Perspektiven einbringt. Für eine robuste und vertrauenswürdige Erkennung – etwa zur Unterstützung von Ermittlungen oder Plattformmoderation – ist dieser hybride Ansatz vielversprechend.
+\end{quote}

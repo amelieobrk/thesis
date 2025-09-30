@@ -1,0 +1,72 @@
+
+\begin{figure}[t]
+\centering
+\begin{tikzpicture}[node distance=6mm and 9mm, font=\small,
+                    scale=0.9, every node/.style={transform shape}]
+
+
+% --- TEXT STREAM (blue) ---
+\node[box, streamText] (txt) {Text chunk};
+\node[op, below=of txt] (tok) {Tokenizer};
+\node[box, streamText, below=of tok, minimum width=40mm] (bert1)
+  {BERT Encoder\\Layers 1--5};
+\node[box, streamText, below=of bert1, minimum width=40mm] (l6)
+  {Layer 6 hidden states};
+
+% --- LIWC STREAM (violet) ---
+\node[box, streamLIWC, right=45mm of tok] (liwc)
+  {LIWC features\\(118 all \textit{or} 49 psychometric)};
+\node[op, below=of liwc] (proj)
+  {Linear + GELU + LN\\(\texttt{proj\_dim} = 768)};
+\node[op, below=of proj] (tokproj)
+  {Linear $\rightarrow d_{\text{model}}$\\(make 1 \textbf{LIWC token})};
+
+% --- FUSION BLOCK @ L6 ---
+\node[box, below=of l6, minimum width=50mm] (fuse6)
+  {\textbf{FusionBlock @ L6}\\
+   \footnotesize Cross-Attn (Q: text, K/V: LIWC token)\\
+   \footnotesize Gate(\,[CLS], LIWC vec\,) $\Rightarrow$ shift + residual + LN};
+\node[box, streamText, below=of fuse6, minimum width=40mm] (bert2)
+  {BERT Encoder\\Layers 7--11};
+\node[box, streamText, below=of bert2, minimum width=40mm] (l12)
+  {Layer 12 hidden states};
+
+% --- FUSION BLOCK @ L12 ---
+\node[box, below=of l12, minimum width=50mm] (fuse12)
+  {\textbf{FusionBlock @ L12}\\
+   \footnotesize same as above};
+\node[op, below=of fuse12] (pool)
+  {[CLS] pooler + Tanh};
+\node[op, below=of pool] (clf)
+  {Linear $\rightarrow$ logits (2)};
+
+% --- connections (text, blue) ---
+\draw[very thick, blue!60!black] (txt) -- (tok) -- (bert1) -- (l6) -- (fuse6) -- (bert2) -- (l12) -- (fuse12) -- (pool) -- (clf);
+
+% --- connections (liwc, violet) ---
+\draw[very thick, violet!70!black] (liwc) -- (proj) -- (tokproj);
+
+% arrows into FusionBlocks
+\draw[->, thick, violet!70!black] (tokproj.south) |- ($(fuse6.north east)+(0,-2mm)$);
+\draw[->, thick, violet!70!black] (proj.west) -| ($(fuse6.north east)+(-8mm,-2mm)$) node[pos=0.5, above, note] {\footnotesize LIWC vec for Gate};
+
+\draw[->, thick, violet!70!black] (tokproj.south) |- ($(fuse12.north east)+(0,-2mm)$);
+\draw[->, thick, violet!70!black] (proj.west) -| ($(fuse12.north east)+(-8mm,-2mm)$);
+
+% CLS tap notes
+\node[note, right=4mm of fuse6] {\footnotesize Gate type: \texttt{channel}xw};
+\node[note, right=4mm of fuse12] {\footnotesize Dropout + post-LN inside block};
+
+% --- legend ---
+\node[draw, thick, rounded corners, align=left, below=8mm of clf, inner sep=4pt] (leg) {
+\textbf{Legend}\\
+\textcolor{blue!70!black}{\rule{8mm}{2pt}} Text stream (BERT hidden states)\\
+\textcolor{violet!80!black}{\rule{8mm}{2pt}} LIWC stream (sidecar $\rightarrow$ proj.)\\
+Fusion at layers \textbf{6} and \textbf{12}; pooled [CLS];\\
+combine = \texttt{mean} over pooled reps.
+};
+
+\end{tikzpicture}
+\caption{Late fusion of LIWC with BERT: LIWC features (either all 118 or the 49 psychometric subset) are projected, turned into a single \emph{LIWC token} and fused via cross-attention plus a gate (Multimodal Shifting) at layers 6 and 12. The [CLS] representation is pooled and classified.}
+\label{fig:liwc-bert-fusion}
+\end{figure}
