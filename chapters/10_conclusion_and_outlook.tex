@@ -59,41 +59,13 @@ also shown that individuals often have previous offences for child pornography a
 
 %%% Meinen Ansatz auf den PAN12 Datensatz anwenden, um die Ergebnisse vergleichbar zu machen mit anderen Arbeiten allerdings müssten wir hier wieder slang handling machen um die maximalen linguistischen Informationen rauszuholen
 
+
 %% Sehr spannend wäre ein model, was basierend auf den LIWC Kategorien die Phasen zuordnet (folgend nach einen der vorgestellten Modelle)
 
-%%%%% The main limitation of this study lies in the benchmark dataset, pan, which is solely in English. This
-%restricts the generalizability of our findings to other
-%languages. We acknowledge that online grooming occurs across other languages, highlighting the
-%critical need for non-English training datasets. Expanding research to include multilingual datasets
-%would allow for a more comprehensive evaluation
-%of online grooming detection techniques, including
-%the effectiveness of our backtranslation augmentation. Additionally, the victims in pan are trained
-%adult decoys rather than actual minors, which may
-%affect the quality and reliability of results. Finally,
-%while the ultimate objective of online grooming detection is to identify predators before they can harm
-%potential victims, our study requires the entire conversation for classification. In future work, we plan
-%to focus on the task of early detection, that is, identifying grooming behaviors at early stages based
-%on the first few messages before the conversation
-%escalates into serious exploitation or abuse
 
+%% es wäre spannend vielleicht mal bert nur auf LIWC kategorien zu trainieren und zu schauen wie gut das funktioniert und welche kategorien wichtig sind
 
-
-%Phasen-Klassifikation (mehrstufig nach Grooming-Phase): Theoretisch durchläuft ein Grooming-Versuch verschiedene Stadien (z. B. nach O’Connell: Anbahnung/Freundschaft, Beziehungsaufbau, Risikoprüfung, sexuelle Phase). Es klingt attraktiv, ein Modell zu bauen, das diese Feinabstufungen erkennt – etwa um frühzeitig Alarm zu schlagen, wenn es noch in Phase 1–2 ist. Allerdings ist dies in der Praxis weit schwieriger umzusetzen:
-
-
-%Keine vorhandenen Labels: Die öffentlichen Datensätze enthalten keine Phasen-Labels, sondern nur Gesamturteile pro Chat. Es gibt also keinen großen Korpus, wo jede Nachricht oder jeder Abschnitt mit „Phase 1/2/3/4“ markiert ist. Eine Ausnahme ist der ChatCoder2-Datensatz mit drei definierten Phasen (Austausch von persönlichen Informationen, Grooming, Annäherung ans Opfer)​
-%aclanthology.org
-
-%Hoher Annotatonsaufwand: Um Phasenklassifikation zu betreiben, müsste man selbst die vorhandenen Grooming-Chats nachannotieren – d. h. festlegen, ab welcher Zeile Phase 1 endet, wo Phase 2 beginnt etc., für jeden Chat. Das erfordert Expertenwissen und ist zeitaufwändig. Die Grenzen zwischen den Phasen sind oft fließend und subjektiv: nicht jeder Täter durchläuft die Phasen klar in Reihenfolge, manche steigen direkt sexuell ein​
-%medium.com
-
-
-%, andere halten Smalltalk über viele Nachrichten. Selbst menschliche Annotatoren bräuchten klare Richtlinien und würden vermutlich uneinheitlich labeln, was Konsistenzprobleme schafft. In 5 Monaten Projektzeit ist eine zuverlässige Phasen-Annotation von hunderten Chats kaum zu bewältigen.
-%Datenmenge pro Klasse: Eine mehrstufige Klassifikation würde die ohnehin kleine Menge an positiven Fällen auf mehrere Klassen aufteilen. Jede Phase wäre eine eigene Klasse, die genug Trainingsbeispiele bräuchte. Wenn z. B. die meisten Chats die sexuelle Phase erreichen, aber weniger Chats einen Abbruch in Phase 2 zeigen, wären die Klassen sehr unausgewogen. Das verschärft das Datenproblem weiter und könnte dazu führen, dass einige Phasen vom Modell kaum gelernt werden (weil zu wenige Beispiele).
-%Modelldesign-Komplexität: Soll die Phase pro Nachricht erkannt werden (Sequenz-Labeling) oder pro Gesamtdialog (klassifizieren nach „dominierender Phase“)? Beides hat Tücken. Pro Nachricht zu labeln erfordert viel Kontext (eine einzelne Chat-Nachricht ist oft zu kurz und mehrdeutig​
-%medium.com
-%) – man müsste also sequentielle Modelle oder Fenster über den Dialog konstruieren. Eine pauschale Phasenangabe pro Chat wiederum geht verloren, wenn ein Chat mehrere Phasen durchläuft. Beispielsweise: Ein Chat beginnt in Phase 1 und endet in Phase 4 – welche Klasse würde man dem ganzen Chat geben? Das wäre schwer zu definieren (evtl. „letzte erreichte Phase“, aber das ist willkürlich als Label).
-
+%%% wie bereits erwähnt Modell auf eine kleinere Anzahl von LIWC Kategorien trainieren (z. B. nur die 10 wichtigsten) und schauen wie gut das funktioniert
 
 
 
