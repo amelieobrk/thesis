@@ -2,7 +2,7 @@
 
 %%Überarbeitet
 
-Transformer models were firstly introduced by Vaswani et al. \parencite{vaswani2017attention} in their paper \textit{Attention Is All You Need}. After being introduced, transformers became a key component in many state-of-the-art NLP models. Thanks to their design, Transformers are both highly effective for a wide range of NLP tasks and computationally efficient to train. Their success has led to a lot of variants, such as XML \parencite{lample2019cross}, GPT \parencite{radford2018gpt}, and XLNet\parencite{yang2019xlnet}. Thereby, the central characteristic of Transformer Models lies on their reliance, unlike previous sequence models based on recurrence or convolution, entirely on an \textbf{attention mechanisms}, enabling greater parallelization and more effective modeling of long-range dependencies.
+Transformer models were firstly introduced by Vaswani et al. \parencite{vaswani2017attention} in their paper \textit{Attention Is All You Need}. After being introduced, transformers became a key component in many state-of-the-art NLP models. Thanks to their design, Transformers are both highly effective for a wide range of NLP tasks and computationally efficient to train. Their success has led to a lot of variants, such as XML \parencite{lample2019cross}, GPT \parencite{radford2018gpt}, and XLNet\parencite{yang2019xlnet}. Thereby, the central characteristic of Transformer Models lies on their reliance, unlike previous sequence models based on recurrence or convolution, entirely on an \textbf{attention mechanisms}, enabling greater parallelization and more effective modeling of long range dependencies.
 
 Therefore, the core component is called the \textbf{self-attention} mechanism, which computes a weighted representation of each input token by attending to all other tokens in the sequence. Specifically, the model uses \textbf{scaled dot-product attention}, where the attention weights are being calculated as:
 
@@ -74,13 +74,7 @@ A central trend in current research is the use of cross-attention to improve fea
 In the context of BERT, this means that the hidden states of the text representation can specifically pay attention to additional compressed features~\parencite{biggiogera2021,cai2025multimodal}. This creates a context-dependent interaction that weights additional information without disrupting the proven language modeling~\parencite{cai2025multimodal}.    
 In Cross-Attention, the integration is typically achieved with a gating system that adds the cross-attention output (H' = H + g \odot Attn(H, t)) in a way that additional information is only incorporated if it is actually informative. This ensures that the model can fall back on the original BERT representation if the additional features are not helpful~\parencite{cai2025multimodal}.
 
-
-
-
-
-
 \section{Transformer-based Methods for Cybergrooming Detection}
-
 
 Transformer-based models have fundamentally transformed the field of automated cybergrooming detection, decidedly outperforming traditional machine learning approaches in recent years. The introduction of BERT (Bidirectional Encoder Representations from Transformers) and its subsequent improvement in RoBERTa (Robustly Optimized BERT Pretraining Approach) enabled robust semantic and syntactic modeling of chat conversations, even in the presence of informality or unstructured grammar, as frequently encountered in online communication. Research shows that BERT- and RoBERTa-based frameworks achieve high accuracy and robustness in detecting grooming behaviors, both in early and aggregate phases of chat dialogues~\parencite{vogt2021early}. 
 
@@ -97,4 +91,4 @@ In socially and psychologically complex tasks such as cybergrooming detection, w
 
 Recent explainability frameworks for language models specifically address this gap: Ribeiro et al.~\cite{ribeiro2024methodologyexplainablelargelanguage} present a methodology that combines techniques such as Integrated Gradients with psycholinguistic tools like LIWC. This hybrid approach not only clarifies \emph{which} linguistic units drive model decisions, but also identifies the crucial psycholinguistic and emotional categories—such as trust markers and affectivity—that influenced those predictions. Methods such as SHAP or the explicit integration of LIWC attributions can thus substantially improve both model transparency and the psychological interpretability of transformer-based predictions. %%%approved
 
-This leads directly to the research focus of the present work. By strategically combining transformer architectures with psycholinguistic analysis tools like LIWC and explainability frameworks such as SHAP, there is a chance to strengthen both the predictive power and the interpretative depth of online grooming detection systems.
+This leads directly to the research focus of the present work. By combining transformer architectures with LIWC and explainability frameworks such as SHAP, there is a chance to strengthen the predictive power and the interpretative depth of online grooming detection systems.

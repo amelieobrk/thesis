@@ -7,9 +7,9 @@ This chapter introduces the term “cybergrooming” and relevant research in th
 \section{Understanding Cybergrooming}
 
 
-The terms “online grooming” and “cybergrooming” are often used synonymously to describe the process by which an adult establishes a digital relationship with a minor in order to achieve and facilitate subsequent sexual exploitation. In academic literature, “online grooming” is the internationally established term for this phenomenon, particularly in the fields of psychology, criminology, and child protection. However, the synonymous term “cybergrooming” is more commonly used in media education and German-language legal discourse, with an emphasis on the technological environment in which the grooming takes place \parencite{mladenovic2021cyber, schittenhelm2024cybergrooming}. \textbf{To maintain terminological clarity, the term “cybergrooming” is used throughout this thesis. } %Überarbeitet 
+The terms “online grooming” and “cybergrooming” are often used synonymously to describe the process by which an adult establishes a digital relationship with a minor in order to achieve and facilitate subsequent sexual exploitation. In academic literature, “online grooming” is the internationally established term for this phenomenon, particularly in the fields of psychology, criminology and child protection. However, the synonymous term “cybergrooming” is more commonly used in media education and German-language legal discourse, with an emphasis on the technological environment in which the grooming takes place \parencite{mladenovic2021cyber, schittenhelm2024cybergrooming}. \textbf{To maintain terminological clarity, the term “cybergrooming” is used throughout this thesis. } %Überarbeitet 
 
-Cybergrooming can be seen as a psychological manipulation process in which a perpetrator uses digital communication technologies to befriend a minor, initiate sexual interactions online, and/or arrange a physical meeting with the aim of sexual abuse \parencite{webster2021european}. This process usually takes place in several stages, in which trust is gradually built up, emotional dependence is created, and the minor is desensitized to sexual content or requests \parencite{whittle2013review}. Groomers often present themselves as friendly and understanding, using engaging and emotionally supportive language rather than openly deceiving \parencite{broome2020psycholinguistic}. This process is facilitated by digital media, which allow perpetrators to remain anonymous and gain unrestricted access to children without direct adult supervision \parencite{mladenovic2021cyber}. %Überarbeitet
+Cybergrooming can be seen as a psychological manipulation process in which a perpetrator uses digital communication technologies to befriend a minor, initiate sexual interactions online and/or arrange a physical meeting with the aim of sexual abuse \parencite{webster2021european}. This process usually takes place in several stages, in which trust is gradually built up, emotional dependence is created and the minor is desensitized to sexual content or requests \parencite{whittle2013review}. Groomers often present themselves as friendly and understanding, using engaging and emotionally supportive language rather than openly deceiving \parencite{broome2020psycholinguistic}. This process is facilitated by digital media, which allow perpetrators to remain anonymous and gain unrestricted access to children without direct adult supervision \parencite{mladenovic2021cyber}. %Überarbeitet
 
 
 It is important to note that online grooming does not refer to the sexual abuse itself, but rather to the preparatory phase and psychological manipulation. The perpetrator uses targeted strategies to influence the victim's thoughts, emotions and decision-making processes in such a way that they serve his own intentions \parencite{schittenhelm2024cybergrooming}. This grooming dynamic is not limited to online contexts. The broader term “grooming” refers to any deliberate strategy used by perpetrators to emotionally condition and exploit defenseless minors and is a significant mechanism in cases of sexual abuse \parencite{craven2006grooming}.
@@ -33,7 +33,7 @@ An alternative, linguistically based model was proposed by \textcite{lorenzo2016
 
 Another influential model was developed by \textcite{williamsmodel}, who analyzed convicted sex offenders in New Zealand. Their three-stage typology—\emph{relationship building}, \emph{sexual content} and \emph{assessment}—emphasizes the dynamics of early manipulation. According to \textcite{williamsmodel}, in the \emph{relationship building} phase, offenders adapt their language to that of adolescents in order to create a feeling of closeness. The \emph{sexual content} phase often begins subtly, for example through games or advice and ends with explicit offers. The \emph{assessment} phase serves to continuously evaluate risk and create an emotional profile of the victim.
 
-A psychologically based extension is also provided by Olson's \emph{Luring Communication Theory} (LCT), which was originally designed for offline grooming but can also be applied to online contexts \parencite{Cano2014}. This model comprises three phases: \emph{Deceptive Trust Development}, \emph{Grooming} and \emph{Physical Approach}. In the first phase, an emotional connection is established through personal exchange (e.g., conversations about age or interests). This is followed by increasingly sexualized communication, which eventually transitions into a phase in which physical contact is initiated.
+A psychologically based extension is also provided by Olson's \emph{Luring Communication Theory} (LCT), which was originally designed for offline grooming but can also be applied to online contexts \parencite{Cano2014}. This model comprises three phases containing \emph{Deceptive Trust Development}, \emph{Grooming} and \emph{Physical Approach}. In the first phase, an emotional connection is established through personal exchange. This is followed by increasing sexualized communication, which finally transitions into a phase in which physical contact is initiated.
 
 Taken together, these models show that grooming processes often proceed in strategically structured phases that are realized linguistically through specific communicative actions. %%Überarbeitet
 
@@ -84,84 +84,6 @@ Preuß et al. \ \parencite{preuss2021automatically} went one step further and pr
 
 Together, these studies highlight the increasing complexity of machine learning methods in detecting grooming. However, as An et al. \ \parencite{an2025cybergrooming} point out, a key challenge remains the lack of interdisciplinary integration. Many models operate in isolation from psychological theories or social contexts, limiting their ability to generalize to real-world scenarios. The following sections therefore examine new transformer-based language models and explore how psycholinguistic profiling tools such as LIWC can be used to bridge this gap between behavioral knowledge and algorithmic accuracy.
 
-%%% Überarbeitet
-
-\begin{comment}
-
-
-\subsection{Remaining Challenges in automated Cybergrooming Detection}
-
-\subsection{Remaining Challenges in Cybergrooming Detection}
-
-Despite notable advances, the automated detection of online grooming remains a complex task. Challenges include the informal and fragmented nature of online chats, the gradual and manipulative structure of grooming conversations and the difficulty of identifying the predator in anonymized interactions \parencite{schlaepfer2022online, gupta2012characterizingpedophileconversationsinternet}. Moreover, the need to detect abusive intent early—while minimizing false positives—raises ethical concerns, particularly in high-stakes child protection contexts \parencite{vogt2021early}.
-
-Addressing these challenges requires models that are both linguistically robust and contextually aware. In the following, recent Transformer-based language models are explored as a foundation for capturing the nuanced dynamics of grooming. Subsequently, the integration of psycholinguistic profiling through LIWC is examined as a means to enhance interpretability and behavioral insight in detection systems.
-
-
-The automated detection of online grooming remains a highly complex and ethically sensitive task. Several linguistic, behavioral, and technical challenges hinder the development of accurate and timely detection systems. 
-
-First, the informal nature of online communication presents significant obstacles. Chats often contain grammatical and typographical errors, emoticons, abbreviations, and non-standard language that complicate traditional natural language processing techniques \cite{bours2023,}. Furthermore, conversations typically span over long periods and consist of non-contiguous exchanges, making it difficult to establish consistent behavioral patterns \cite{schlaepfer2022online}. 
-
-Second, grooming conversations evolve in distinct phases—starting with trust-building and benign exchanges, and gradually progressing toward sexual topics and manipulation. This staged approach makes early detection difficult, as the initial messages often resemble harmless conversations between peers \cite{vogt2021early,schlaepfer2022online}. In fact, critical indicators such as isolation tactics or age-related probing may only appear much later in the interaction \cite{vogt2021early}. The need to balance early intervention with false alert minimization poses an additional ethical dilemma: triggering alerts too early may lead to false accusations, while delaying them can result in missed interventions \cite{vogt2021early}. 
-
-Third, the anonymity of online platforms exacerbates the issue. Predators often impersonate minors and mimic their writing style, making it difficult to distinguish between consensual adult interactions and exploitative conversations \cite{schlaepfer2022online}. Moreover, models must be able to detect not just whether grooming is occurring, but also which user is the predator and which messages are indicative of abusive behavior \cite{cardei}.
-
-Finally, significant non-technical challenges exist. The acquisition of high-quality, real-world datasets is constrained by legal, ethical, and privacy concerns \cite{schlaepfer2022online}. Most available corpora require extensive manual annotation, which is labor-intensive and error-prone \cite{gupta2012characterizingpedophileconversationsinternet}. Differences in chat formats across platforms and the necessity of anonymization further complicate data preprocessing and model development \cite{gupta2012characterizingpedophileconversationsinternet}.
-
-Together, these factors illustrate the intricate and multi-faceted nature of automated online grooming detection. Effective systems must be robust across linguistic variability, temporally aware, ethically grounded, and technically adaptable.
-
-
-Recent advances in natural language processing, particularly the emergence of transformer-based models such as BERT and DeBERTa v3, offer promising solutions to many of the aforementioned challenges. These models excel at capturing long-range dependencies and contextual nuances in unstructured text, making them well-suited for the dynamic and subtle nature of grooming conversations. In the following sections, relevant transformer architectures and outline will be proposed
-
-
-    
-\end{comment}
-
-
-
-
-\begin{comment}
-
-
-
-
-
-
-
-An et. al haben hierfür beispielsweise eine   eine systematische Literaturübersicht, die Methoden und Forschungslücken zusammenfasst (soziale vs. technologische Ansätze).
-
-Ziel: Überblick über aktuelle Forschung zu Cybergrooming Detection allgemein
-
-
-
-
-"Enhancing grooming detection via Backtranslation Augmentation"
-Methode: Finetuning eines BERT-Modells mit synthetisch augmentierten Chatdaten mittels Backtranslation.
-
-Task: Sexual Predator Identification, also binäre Klassifikation kompletter Chats.
-
-Besonderheit: Fokus liegt auf Datenaugmentation, nicht explizit auf Prozessphasen .
-
-
-
-\end{comment}
-
-
-%% Cybergroom
-
-
-
-
-%%% Hier ein paar Ansätze aufzeigen
-
-%%% Hier außedem noch sagen dass es in Early Grooming Detection und generell Grooming Detection unterteilt werden kann
-
-
-%%% 2.4 Technische Erkennungsansätze
-%%  - Klassische Ansätze: z. B. Keyword-basiert, Regelbasiert
- %% - ML-basierte: SVM, RF (nur erwähnen)
- %% - Transformer-basierte Ansätze (Teaser auf deine Methodik)
- %% - Bisher kaum: Kombination mit psychometrischen oder LIWC-Features
 
 
 
