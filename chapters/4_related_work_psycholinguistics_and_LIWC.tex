@@ -71,24 +71,40 @@ The following LIWC dimensions have consistently proven to be most informative in
 
 In summary, LIWC offers a validated, scalable, and interpretable set of psycholinguistic features that has proven  effective both for descriptive analyses and as input variables for machine learning models in cybergrooming research~\cite{an2025cybergrooming, gupta2012characterizingpedophileconversationsinternet, Cano2014, guo2023text,broome2020psycholinguistic}. Its widespread adoption and continuous methodological refinement make it an important resource for understanding, detecting, and ultimately preventing online grooming.
 
-\section{Explainable AI with SHAP}
+\section{Explainable AI}
 
 While deep learning models achieve remarkable performance in natural language processing tasks, their decision-making processes often remain obscure. This is particularly relevant for deep neural networks such as transformer-based language models, as such models act as \emph{black boxes}: due to millions of parameters and complex, non-linear relationships, it is difficult to directly interpret the decision logic~\cite{bilal2025}, \cite{ali2022}. The field of Explainable AI (XAI) seeks to address this by developing methods that make model behavior interpretable and comprehensible to human users. %% approved
-One of the key techniques in XAI is the use of feature attribution methods, which assign importance scores to individual input features based on their contribution to the model's output. This allows users to understand which aspects of the input data most strongly influence the model's predictions. Two widely used methods for this purpose are SHAP (Shapley Additive explanations) and LIME (Local Interpretable Model-agnostic Explanations). Both approaches aim to explain individual model predictions by quantifying the importance of input features, yet they differ significantly in their underlying methodology and scope.
+One of the key techniques in XAI is the use of feature attribution methods, which assign importance scores to individual input features based on their contribution to the model's output. This allows users to understand which aspects of the input data most strongly influence the model's predictions. Two widely used methods for this purpose are SHAP (Shapley Additive explanations) \cite{lundberg2017shap} and LIME (Local Interpretable Model-agnostic Explanations) \cite{ribeiro2016lime}. Both approaches aim to explain individual model predictions by quantifying the importance of input features but they differ in their underlying methodology and scope. Since in this thesis SHAP is used, the following section focuses on explaining this method in more detail. %% approved
 
-\textbf{SHAP} is grounded in cooperative game theory and builds on the concept of \emph{Shapley values}~\cite{lundberg2017shap}. It treats the prediction task as a game in which each input feature contributes to the final outcome. For a given model and instance, SHAP calculates how the model's prediction changes when a specific feature is added or removed from all possible subsets of features. The resulting Shapley value of a feature is its average marginal contribution across all possible feature combinations. This makes SHAP a mathematically sound and globally consistent attribution method.
 
-One of SHAP's core strengths is its satisfaction of desirable properties such as:
+\section{SHAP (Shapley Additive Explanations)}
+\textbf{SHAP} is grounded in cooperative game theory and builds on the concept of \emph{Shapley values}~\cite{lundberg2017shap}. It treats the prediction task as a game in which each input feature contributes to the final outcome. For a given model and instance, SHAP calculates how the model's prediction changes when a specific feature is added or removed from all possible subsets of features. The resulting Shapley value of a feature is its average marginal contribution across all possible feature combinations. This makes SHAP a mathematically sound and globally consistent attribution method. \cite{lundberg2017shap}
+
+Formally, the SHAP value $\phi_i$ of a feature $i$ is defined as:
+
+\[
+\phi_i(f, x) = 
+\sum_{S \subseteq N \setminus \{i\}} 
+\frac{|S|!\,(|N|-|S|-1)!}{|N|!} 
+\Big[ f_{S \cup \{i\}}(x_{S \cup \{i\}}) - f_S(x_S) \Big],
+\]
+
+where $N$ is the set of all features, $S$ is a subset of $N$ excluding $i$, and 
+$f_S(x_S)$ denotes the model prediction based only on the features in $S$ 
+\cite{lundberg2017shap}.
+
+One of SHAP's core strengths is the satisfaction of desirable properties, which build on the classical axiomatization of Shapley values. The original Shapley value was characterized by the four axioms \textbf{Efficiency}, \textbf{Symmetry}, \textbf{Dummy Player Property}, and \textbf{Additivity}~\cite{shapley1953value}. SHAP reformulates these properties for the context of machine learning explanations and satisfies the following three key properties~\cite{lundberg2017shap}:
 
 \begin{itemize}
-    \item \textbf{Fairness}: Features that have no impact on the model output receive a SHAP value of zero.
-    \item \textbf{Consistency}: If a model is changed such that a feature contributes more to the output, its SHAP value does not decrease.
-    \item \textbf{Additivity}: The sum of all SHAP values plus a base value (often the average model output) exactly equals the model prediction for the instance.
-
+    \item \textbf{Local Accuracy}: The sum of all SHAP values plus a base value (the expected model output) exactly equals the model prediction for the instance. This corresponds to the classical efficiency axiom~\cite{lundberg2017shap}.
+    \item \textbf{Missingness}: Features that are missing or have no impact on the model output receive a SHAP value of zero. This property ensures unique solutions and extends the classical dummy player axiom~\cite{lundberg2017shap}.
+    \item \textbf{Consistency}: If a model is changed such that a feature's marginal contribution increases (or stays the same) for all possible feature coalitions, its SHAP value does not decrease. This property ensures faithful representation of feature importance changes~\cite{lundberg2017shap}.
 \end{itemize}
-SHAP can be applied to any machine learning model, including complex deep learning architectures, making it a versatile tool for interpreting model behavior across different domains. \textbf{However, calculating exact Shapley values can be computationally expensive, especially for models with many features \cite{rozemberczki2022shapley}, \cite{aas2021explaining}. Also, it is important to note that SHAP explanations can be affected by class imbalance. In strongly skewed datasets, the attributions may be dominated by the majority class, potentially obscuring signals from the minority class. Therefore, balancing the data or carefully designing the background distribution is recommended to ensure faithful and interpretable explanations~\cite{liu2022balancedbackgroundexplanationdata}, \cite{chen2024interpretable}.
-}
- 
+
+SHAP can be applied to any machine learning model, including complex deep learning architectures, making it a versatile tool for interpreting model behavior across different domains. \textbf{However, calculating exact Shapley values can be computationally expensive, especially for models with many features \cite{rozemberczki2022shapley}, \cite{aas2021explaining}.}  To address the computational complexity of SHAP value calculation, \textbf{KernelSHAP} was developed as an approximation method~\cite{lundberg2017shap}. KernelSHAP formulates the Shapley value computation as a weighted least squares regression problem which uses a sampling approach to approximate the high number of feature coalitions~\cite{covert2021}. As an alternative of evaluating all $2^p$ possible feature subsets (where $p$ is the number of features), KernelSHAP samples a smaller subset of coalitions and uses weighted regression to estimate the Shapley values, reducing computational complexity from exponential to polynomial time~\cite{rozemberczki2022shapley}. This makes SHAP applicable to high-dimensional models while maintaining computational costs.
+
+Also, it is important to note that SHAP explanations can be affected by class imbalance. In strongly skewed datasets, the attributions may be dominated by the majority class, potentially obscuring signals from the minority class. Therefore, balancing the data or carefully designing the background distribution is recommended to ensure faithful and interpretable explanations~\cite{liu2022balancedbackgroundexplanationdata}, \cite{chen2024interpretable}.
+
 
 \section{Integrating Psycholinguistic Features and Explainable AI for Enhanced Grooming Detection}
 Previous approaches to detecting cyber grooming have primarily focused on linguistic features for the early identification of problematic communication~\cite{yakut-kilic-pan-2022-incorporating}, but have systematically neglected the integration of validated psychological frameworks into explainable AI approaches~\cite{broome2020psycholinguistic}. Recent research demonstrates that combining LIWC features with Transformer-based models and SHAP can significantly enhance both the interpretability and predictive performance of models.
@@ -104,68 +120,3 @@ Despite these advances, a significant research gap remains in the domain of cybe
 
 
 
-\begin{comment}
-    Explainability in Transformer-based Grooming Detection
-    – Wie bisherige Arbeiten XAI nutzen (z. B. Ribeiro et al. 2024, Broome et al., Mersha et al.)
-    – Warum psycholinguistische Features (LIWC) besonders geeignet sind: sie sind menschenverständlich, validiert und direkt interpretierbar
-    – Kombination von SHAP + LIWC als erklärbare Pipeline
-
-
-Your Contribution
-– Ziel deiner Arbeit: mit LIWC die Erklärbarkeit steigern
-– Hinweis, dass du in Kapitel 5/6/7 auf die empirischen Ergebnisse dieser Kombination zurückkommst
-\end{comment}
-
-
-%%% The combination of LIWC’s validated feature set and its capacity for interpretability makes it particularly valuable for explainable artificial intelligence (XAI), where understanding model decisions is essent
-
-
-%%%%% For example, Guo et al.~\cite{guo2023textmining} demonstrated how LIWC features can improve the explainability of machine learning models in the context of text mining and social media analysis. %% approved
-
-
-
-
-\begin{comment}
-    
-
-
-
-Explainability-Methoden wie \textbf{SHAP} und \textbf{LIME} ermöglichen es, Entscheidungen komplexer Modelle \emph{nachvollziehbar} zu machen. Bei kombinierten RoBERTa+LIWC-Modellen kann analysiert werden, welche psycholinguistischen Kategorien entscheidend für die Klassifikation ``Grooming'' waren.
-
-Beispiele:
-\begin{itemize}
-    \item \textbf{Mehta et al. (2021)}: SHAP-Visualisierungen der wichtigsten LIWC-Kategorien pro Persönlichkeitsklasse.
-    \item \textbf{Shahzad et al. (2024)}: LIME zeigt Schlüsselwörter für Hate-Speech-Klassifikation; übertragbar auf Grooming.
-\end{itemize}
-% Warum erklärbare Modelle wichtig sind, gerade bei sensiblen Themen wie Grooming Detection.
-%Was ist Explainability? Unterschied zu Interpretierbarkeit
-%SHAP: Konzept & Beispielanwendung
-%LIME: Idee & Visualisierung
-%Anwendung auf LIWC+RoBERTa Modelle
-
-
-
-für mich wichtig:
-1. Baseline ist wichtig
-Ein starkes Baseline-Modell (RoBERTa-only) ist ein Geschenk: Es zeigt, dass dein Preprocessing, Datenset und Task solide aufgebaut sind. Jetzt kannst du in deiner Arbeit untersuchen:
-
-➤ Wann versagt RoBERTa allein? Wo liegen die Fehler?
-➤ Wo könnten psycholinguistische Merkmale doch noch helfen?
-
-2. Explainability als legitimer Mehrwert
-Auch wenn die Performance schon hoch ist, kann LIWC dir helfen, die Entscheidungen des Modells zu erklären – was in sensiblen Themen wie Cybergrooming zentral ist.
-
-➤ RoBERTa kann sagen, „dieser Chat ist Grooming“. Aber LIWC zeigt dir, dass es z. B. an erhöhter Nutzung von „social processes“, „present focus“ oder „cognitive words“ liegt.
-➤ SHAP-Werte können zeigen, dass bestimmte LIWC-Kategorien systematisch zur Entscheidung beitragen.
-
-3. Edge Cases und Ablation-Study
-Du kannst gezielt analysieren, ob RoBERTa bei bestimmten Subgruppen (z. B. kurze Chats, weniger explizite Sprache, viele Slangwörter) schlechter performt – und ob LIWC dort einen Beitrag liefert.
-
-➤ Beispiel: Wenn du Fälle mit hohem „Authenticity“-Score (LIWC) betrachtest, versagt RoBERTa vielleicht häufiger, weil Sprache „echter“ wirkt.
-➤ Diese „Ablation nach Textmerkmalen“ ist wissenschaftlich extrem interessant.
-
-
-
-\end{comment}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

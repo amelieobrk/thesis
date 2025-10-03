@@ -38,7 +38,7 @@
 
 \documentclass[
   english,
-  accentcolor=9c,
+  accentcolor=2d,
   ruledheaders=section,
   class=report,
   thesis={type=master},
@@ -127,10 +127,10 @@
 %%%%%%%%%%%%%%%%%%%
 \title{Master Thesis: Fusion of transformer-based language representations with psycholinguistic LIWC features for improved detection of cybergrooming in chat logs}
 \author{Amelie Oberkirch}
-\reviewer{Shiying Fan \and Prof. Dr. Martin Steinebach}
+\reviewer{Prof. Dr. Martin Steinebach \and Shiying Fan}
 
 % The following elements will be placed on the title page
-\department{Informatik}% If defined the shorthand will be replaced by the full name otherwise it's used directly.
+\department{inf}% If defined the shorthand will be replaced by the full name otherwise it's used directly.
 \institute{Fraunhofer-Institut für Sichere Informationstechnologie}
 \group{Media Security}
 
@@ -141,6 +141,11 @@
 \begin{document}
 
 \maketitle
+\affidavit[
+signature=Amelie Oberkirch,
+signature-image={\includegraphics[width=\width]{bildschirmfoto.png}}]
+\include{Acknowledgements}
+\include{chapters/0_abstract}
 
 %% The affidavit was deactivated by default at the request of Department II.
 %% According to the department, the legally binding text can be found at
@@ -161,7 +166,7 @@
 % \listoffigures
 % \listoftables
 
-\include{chapters/0_abstract}
+
 \include{chapters/1_introduction}
 \include{chapters/2_related_work_grooming}
 \include{chapters/3_related_work_transformer_based_models}
@@ -172,10 +177,10 @@
 \include{chapters/8_evaluation}
 \include{chapters/9_discussion}
 \include{chapters/10_conclusion_and_outlook}
-
 \printbibliography
-
 \chapter{Appendix}
+\section{AI Assistance Statement}
+\textbf{This work was written independently and linguistically revised with the help of ChatGPT and Grammarly.}
 \include{tables/liwc22_categories_appendix_fixed}
 \include{tables/appendix_liwc_table}
 \include{tables/appendix_chunk_wise_liwc}

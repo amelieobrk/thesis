@@ -388,7 +388,7 @@ The training and evaluation of the feature fusion model followed a similar pipel
 \item \textbf{Fusion Depth:} \(1\)
 \end{itemize}
 
-The Evaluation was performed with the same metrics as in the BERT-Baseline (accuracy, precision, recall, F1) on the same splits (test-all, synthetic-only), which havee been logged every 3000 steps during training.
+The Evaluation was performed with the same metrics as in the BERT-Baseline (accuracy, precision, recall, F1) and on the dataset with chunks consisting of 512 tokens and synthetic data in both train and test set. The evaluation was done every 3000 steps of training and the model was stored after each epoch.
 
 
 
