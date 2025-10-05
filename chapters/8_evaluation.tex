@@ -384,11 +384,41 @@ When comparing the ROC curves of the feature-fusion models to the BERT baseline 
 
 \section{Ablation Studies based on SHAP} \label{sec:ablation_studies_shap}
 
-The results of the ablation studies based on SHAP are presented in the following sections. The analysis focuses on understanding the contribution of individual LIWC features to the model's predictions and identifying the most influential features for distinguishing between grooming and non-grooming conversations. The results of the SHAP Analysis were once computed for only the "real" data (PJ + PAN12) to show their how they can be distinguished based on LIWC features and once for the complete dataset (PJ + PAN12 + synthetic) to show how the synthetic data influences the feature importance since the synthetic data was used during training to improve model robustness.
+The results of the ablation studies based on SHAP are presented in the following sections. The analysis focuses on understanding the contribution of individual LIWC features to the model's predictions and identifying the most influential features for distinguishing between grooming and non-grooming conversations. The results of the SHAP Analysis were once computed for only the "real" data (PJ + PAN12) to show their how they can be distinguished based on LIWC features and once for the complete dataset (PJ + PAN12 + synthetic) to show how the synthetic data influences the feature importance since the synthetic data was used during training to improve model robustness. 
 
 \subsection{LIWC feature Importance Ranking} 
 
-To show there results of the LIWC-based SHAP Analysis, several steps were taken. First, the cumulative curves of all features were plotted to show how many features are needed to explain a certain percentage of the model decision (Figure \ref{fig:cumulative_feature_importance_combined}). Next, a global ranking of the top 20 features was created based on their percentages of the total significance (Figure \ref{fig:global_feature_importance_combined}). The results were then evaluated by class and visualized according to the direction of the effect (Figure \ref{fig:feature_importance_by_class_combined}). This makes it possible to understand which LIWC features are particularly relevant and whether they shift the model prediction toward grooming or non-grooming.
+To show there results of the LIWC-based SHAP Analysis, several steps were taken. First, the relative importance of LIWC features in comparison to text tokens was calculated based on their SHAP values. Then, the cumulative curves of all features were plotted to show how many features are needed to explain a certain percentage of the model decision (Figure \ref{fig:cumulative_feature_importance_combined}). Next, a global ranking of the top 20 features was created based on their percentages of the total significance (Figure \ref{fig:global_feature_importance_combined}). The results were then evaluated by class and visualized according to the direction of the effect (Figure \ref{fig:feature_importance_by_class_combined}).
+
+\section{Relative contribution of LIWC versus text tokens.}
+
+Table~\ref{tab:liwc_vs_tokens} summarizes the relative contribution of LIWC features, based on SHAP values, in comparison to text tokens for the model’s predictions, averaged over $N = 1000$ explained test instances.  
+
+When using the complete LIWC feature set, LIWC features accounted for approximately $9.66\% \pm 0.45\%$  of the model’s decision-making process on average, while text tokens contributed about $90.34\% \pm 0.45\%$.  
+
+When restricting the LIWC input to the psychometric subset, the LIWC share decreased further to roughly $7.41\% \pm 0.28\%$, with tokens contributing $92.59\% \pm 0.28\%$.  
+
+The relatively high standard deviations (14.30\% for the full LIWC set and 8.80\% for the psychometric subset) indicate that the LIWC contribution varies across individual predictions. This variation suggests, that while LIWC features play only a minor role overall, they can become locally influential for certain samples where psychological or linguistic cues are more pronounced in the text.
+
+\begin{table}[h!]
+\centering
+\caption[Relative contribution of text tokens and LIWC features.]{Relative contribution (\%) of text tokens and LIWC features across $N = 1000$ explained test instances. For each feature set, the mean, median, standard deviation (std), standard error (SE), and 95\% confidence interval (CI) are shown.}
+\label{tab:liwc_vs_tokens}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Feature Set} & \textbf{Mean (±CI)} & \textbf{Median} & \textbf{Std} & \textbf{SE} \\
+\midrule
+\multicolumn{5}{l}{\textbf{LIWC Features}} \\
+All LIWC Features     & 9.67 (8.78–10.55) & 6.73 & 14.30 & 0.45 \\
+Psychometric Subset   & 7.41 (6.87–7.96)  & 5.63 &  8.80 & 0.28 \\
+\addlinespace[0.3em]
+\midrule
+\multicolumn{5}{l}{\textbf{Text Tokens}} \\
+All LIWC Features     & 90.34 (89.45–91.22) & 93.27 & 14.30 & 0.45 \\
+Psychometric Subset   & 92.59 (92.04–93.13) & 94.37 &  8.80 & 0.28 \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 
 \subsubsection{Cumulative Feature Importance}
@@ -433,9 +463,10 @@ To gain a better understanding of the cumulative importance of features, the cum
   \label{fig:cumulative_feature_importance_combined}
 \end{figure}
 
-When looking at the curves of the cumulative feature importance (Figure \ref{fig:cumulative_feature_importance_combined}), especially on the psychometric subset with no synthetic data, it is noticeable that the top 10 features already explain about 80\% of the model decision and the top 20 features explain almost 100\%. This indicates that the model relies strongly on a few key features to make its predictions when only real data is used. Furthermore, when looking at the cumulative share at the psychometric subset including synthetic data, the top 10 features explain only about 60\% of the model decision, showing that the synthetic data leads to a more even distribution of feature importance across all features, which can be interpreted as a more robust model that does not rely too heavily on individual features. Still, the top 20 features explain almost 80\% of the model decision, indicating the reliance of the model on less than a half of the used psychometric features.
+When looking at the curves of the cumulative feature importance (Figure \ref{fig:cumulative_feature_importance_combined}), it is noticeable that the top 20 features already explain over 80\% of the model decision. This indicates, that the model relies strongly on a few key features to make its predictions. The two curves for the psychometric subset (with and without synthetic data) show an almost identical progression, suggesting that the inclusion of synthetic data does not alter the relative distribution of feature importance.\textbf{Note, that the smaller size of the psychometric subset feature size leads in an overall higher importance per feature compared to the full feature set, where the importance is distributed over a larger number of features.}
 
-\textbf{Note, that the smaller size of the psychometric subset feature size leads in an overall higher importance per feature compared to the full feature set, where the importance is distributed over a larger number of features.} In comparison to the curves based on the psychometric subset, the curves based on all LIWC-2022 features show a more gradual increase, indicating that the model relies on a broader range of features to make its predictions. This is particularly evident when synthetic data is included, where the top 20 features explain only about 40\% of the model decision and the top 40 features explain about 60\%. In contrast, when no synthetic data is included, the top 20 features explain about 50\% of the model decision and the top 40 features explain about 70\% which is still a significant portion regarding the total amount of 118 features.This suggests that the inclusion of synthetic data encourages the model to consider a wider array of features, potentially leading to improved generalization and robustness. Also, it is noticeable that the last 20 feature with the least importance in the full feature set explain only about 5\% of the model decision, indicating that these features contribute very little to the model's predictions and could potentially be excluded without significantly impacting the model performance.
+
+In comparison to the curves based on the psychometric subset, the curves based on all LIWC-2022 features show a more gradual increase, indicating that the model relies on a broader range of features to make its predictions. This is particularly evident when synthetic data is included, where the top 20 features explain only about 40\% of the model decision and the top 40 features explain about 60\%. In contrast, when no synthetic data is included, the top 20 features explain about 50\% of the model decision and the top 40 features explain about 70\% which is still a significant portion regarding the total amount of 118 features.This suggests, that the inclusion of synthetic data encourages the model to consider a wider array of features, potentially leading to improved generalization and robustness. Also, it is noticeable that the last 20 feature with the least importance in the full feature set explain only about 5\% of the model decision, indicating that these features contribute very little to the model's predictions and could potentially be excluded without significantly impacting the model performance.
 
 To gain a deeper understanding of which specific LIWC features are the most influential in the model's decision-making process, a global ranking of the top 20 features was created based on their percentages of the total significance since the top 20 features hold the majority of the model's importance for both fusion configurations. The results are presented in the following Figure \ref{fig:global_feature_importance_combined}.
 
@@ -490,11 +521,10 @@ However, without synthetic data, \emph{formal} features dominate: \textit{WC} cl
  
 
 \paragraph{Psychometric subset (with synthetic data).}
-Here, the focus is clearly on cognitive, social and affective processes such as Cognition (dominant), Social including socrefs/socbehav, Affect, \textit{allure}, \textit{comm}, \textit{insight}, \textit{tone\_pos}/\textit{tone\_neg} and \textit{Drives}. Gender markers (\textit{male}/\textit{female}) and \textit{Physical} appear as contextual signals. The distribution is more balanced than without synthetic data.
-
+Here, the focus is clearly on cognitive, social and affective processes such as \textit{Cognition} (dominant), \textit{tone_pos}, \textit{Social}, \textit{Physical}, \textit{cogproc}, \textit{Affect}, and \textit{insight}. In addition, features like \textit{comm}, \textit{socbehav}, \textit{tentat}, and \textit{cause} appear as secondary but consistent indicators. Compared to the configuration without synthetic data, the feature distribution is more top-heavy, with \textit{Cognition} showing a stronger dominance, suggesting that the model places greater emphasis on cognitive processes when synthetic samples are included.
 
 \paragraph{Psychometric subset (without synthetic data).}
-The ranking remains stable at its core (\textit{Cognition}, \textit{Social}, \textit{Affect}, \textit{allure}), but the top is even more concentrated. In addition, thematic markers (\textit{sexual}, \textit{food}), uncertainty and deliberation signals (\textit{tentat}, \textit{differ}) and affiliation (\textit{affiliation}) are more prominent. This indicates that the model relies particularly heavily on fewer psychological features and more individual thematic cues in real data. Generally, it can be said, that the more even distribution of feature importance when using synthetic data suggests that the model is less dependent on individual features and thus more robust. Also, the importance of the features varies depending on the used configuration, which indicates that the model relies on different features to make its predictions. Still, in the psychometric subset, features like \textit{Cognition}, \textit{Social}, \textit{allure} and \textit{Affect} are consistently important across configurations, highlighting their relevance in distinguishing grooming from non-grooming conversations while in the full feature set, the importance of features varies more widely, indicating that the model may be leveraging a broader range of linguistic cues when all LIWC-2022 features are available.
+The ranking remains stable at its core (\textit{Cognition}, \textit{tone_pos}, \textit{Social}, \textit{cogproc}, \textit{Affect}), but the importance is more evenly distributed across the top features. This indicates that without synthetic data, the model relies on a broader but still consistent range of psychometric indicators. The stable dominance of cognitive and affective markers across both configurations suggests that reasoning, emotional tone, and social orientation are key discriminators between grooming and non-grooming dialogues.
 
 To further gain insights into the direction of the effects of the individual features, the mean signed SHAP values were visualized in the following section.
 
@@ -544,7 +574,7 @@ To further gain insights into the direction of the effects of the individual fea
 Figure \ref{fig:feature_importance_by_class_combined} shows the top 20 LIWC features ranked by their mean signed SHAP values for both configurations (all LIWC-2022 features and psychometric subset) with and without synthetic data. Note, that the mean signed Feature plots show the same features as the global importance plots, but now colored by their direction of effect. Positive values indicate a shift toward the grooming class, negative values toward the non-grooming class. \textbf{However, the direction (positive = grooming, negative = non-grooming in the plots) does not mean that “high” values of a feature always have this effect. Rather, it shows that deviations of the feature from the average contribute to the prediction in this direction.}
 Using the example of \textbf{Word Count}: If the feature indicates non-grooming, this does not automatically mean “high word count = non-grooming.” It can just as easily mean that both high and low values, depending on the context, indicate non-grooming. The plot simply summarizes these effects as an average contribution across all data points considered.
 
-\textbf{ It is also striking, that the SHAP results indicate that several features change their direction when synthetic data are included, suggesting that the feature attribution is sensitive to the underlying data composition.} This is particularly evident in the psychometric subset, where top features like \textit{allure} and \textit{Cognition} shift the direction of their effect when synthetic data is included. It is important to note that the underlying training data remain identical across both analyses. These changes in SHAP directionality are caused by differences in the explained sample set and background distribution, for example, whether synthetic data were included in the explanation phase or filtered out. \textbf{Since SHAP values are computed relative to a background distribution, even small changes in data composition can shift the baseline and therefore the average feature contributions.} Additionally, only 64 samples were explained in each run, which further increases sensitivity to sampling variation. Therefore, the shifts in feature direction should not be interpreted as changes in the model’s learned behavior, but rather as \textbf{artifacts of the explanation setup.}
+\textbf{ It is also striking, that the SHAP results indicate that several features change their direction when synthetic data are included, suggesting that the feature attribution is sensitive to the underlying data composition.} This is particularly evident in the psychometric subset, where top features like \textit{Cognition} and \textit{tone_pos} shift the direction of their effect when synthetic data is included. It is important to mention, that the underlying training data remain identical across both analyses. These changes in SHAP directionality are caused by differences in the explained sample set and background distribution, for example, whether synthetic data were included in the explanation phase or filtered out. \textbf{Since SHAP values are computed relative to a background distribution, even small changes in data composition can shift the baseline and therefore the average feature contributions.} 
 
 \paragraph{Note on axis scaling (effect magnitudes).}
 The x-axis (mean \emph{signed} SHAP value) is scaled very differently across panels. In particular, \emph{All LIWC-2022 features (with synthetic data)} spans roughly $[-200,+200]\times 10^{4}$, whereas \emph{Psychometric subset (no synthetic data)} spans about $[-10,+10]\times 10^{4}$ and \emph{Psychometric subset (with synthetic data)} about $[-1,+1]\times 10^{4}$. 
@@ -561,6 +591,8 @@ With synthetic data, the \emph{semantic-psychological} contrast becomes more app
 
 \paragraph{Psychometric subset with vs. without synthetic data.}
 In the psychometric space, the directional effects are particularly plausible. Deviations linked to \emph{cognition, cooperation, and positive tone} tend to support non-grooming, while deviations related to \emph{negative affect, intensified tone, boundary testing/uncertainty, and intimate context markers} tend to support grooming. With synthetic data, ambivalent categories (such as “compliments/allure” or vulgar language markers) are smoothed and lose their strong one-sided association with grooming. Without synthetic data, sharper contrasts emerge, and grooming- and boundary-testing deviations come more clearly to the fore. The cumulative curves in Figure~\ref{fig:cumulative_feature_importance_combined} illustrate this: synthetic data distribute importance more evenly, while real-only data concentrate importance on a few pronounced deviations.
+
+
 
 
 \section{Confidence Analysis and Label Flip Analysis} \label{sec:confidence_and_label_flip_analysis}
@@ -665,45 +697,7 @@ Overall, these results suggest that while both configurations enhance model conf
 
 \subsection{Results Summary: Full LIWC feature set}
 
-\begin{comment}
-\begin{figure}[H]
-  \centering
-  
-  % Erste Reihe: FP vs TN und FN vs TP
-  \begin{subfigure}[t]{0.49\textwidth}
-    \centering
-    \includegraphics[width=\linewidth,height=6cm,keepaspectratio]{liwc_fpfn_report_all_features/lollipop_fp_vs_tn.png}
-    \caption{FP vs.\ TN (all features).}
-    \label{fig:lollipop_all_fp_vs_tn}
-  \end{subfigure}\hfill
-  \begin{subfigure}[t]{0.49\textwidth}
-    \centering
-    \includegraphics[width=\linewidth,height=6cm,keepaspectratio]{liwc_fpfn_report_all_features/lollipop_fn_vs_tp.png}
-    \caption{FN vs.\ TP (all features).}
-    \label{fig:lollipop_all_fn_vs_tp}
-  \end{subfigure}
-  
-  \vspace{0.5cm}
-  
-  % Zweite Reihe: FP vs TP und FN vs TN
-  \begin{subfigure}[t]{0.49\textwidth}
-    \centering
-    \includegraphics[width=\linewidth,height=6cm,keepaspectratio]{liwc_fpfn_report_all_features/lollipop_tp_vs_fp.png}
-    \caption{FP vs.\ TP (all features).}
-    \label{fig:lollipop_all_fp_vs_tp}
-  \end{subfigure}\hfill
-  \begin{subfigure}[t]{0.49\textwidth}
-    \centering
-    \includegraphics[width=\linewidth,height=6cm,keepaspectratio]{liwc_fpfn_report_all_features/lollipop_tn_vs_fn.png}
-    \caption{FN vs.\ TN (all features).}
-    \label{fig:lollipop_all_fn_vs_tn}
-  \end{subfigure}
 
-  \caption[Lollipop plots for all LIWC-2022 features.]{\textbf{Lollipop plots for all LIWC-2022 features.} 
-  Top row: FP vs.\ TN and FN vs.\ TP. Bottom row: FP vs.\ TP and FN vs.\ TN.}
-  \label{fig:lollipop_all_features}
-\end{figure}
-\end{comment}
 
 \begin{figure}[H]
   \centering
@@ -1023,8 +1017,8 @@ Table \ref{tab:proximity_key_results_all} summarizes the key proximity statistic
 \toprule
 Group & Proximity rate & CI TP-side (n) & CI TN-side (n) & CI crosses 0 (n) \\
 \cmidrule(lr){2-5}
-FP & 0.75 & 4 & 6 & 10 \\
-FN & 0.30 & 1 & 2 & 17 \\
+FP & 0.9 & 2 & 9 & 9 \\
+FN & 0.25 & 2 & 3 & 15 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -1076,8 +1070,8 @@ When looking at the False Negatives in figure \ref{fig:lollipop_psycho} (right),
 \toprule
 Group & Proximity rate & CI TP-side (n) & CI TN-side (n) & CI crosses 0 (n) \\
 \cmidrule(lr){2-5}
-FP & 0.70 & 5 & 3 & 12 \\
-FN & 0.45 & 0 & 1 & 19 \\
+FP & 0.8 & 5 & 6 & 9 \\
+FN & 0.35 & 0 & 1 & 19 \\
 \bottomrule
 \end{tabular}
 \end{table}

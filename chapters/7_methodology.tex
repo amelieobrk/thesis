@@ -1,12 +1,13 @@
 \chapter{Methodology} \label{sec:methodology}
-
-
+This chapter describes the methodology used in this work, including the BERT baseline model, the feature-fusion model architecture, the SHAP explainability analysis, and the analysis of misclassifications.
 \section{Initial Chunking Strategy for BERT Fine-tuning}
 
-The first preprocessing pipeline was designed to provide a straightforward baseline for fine-tuning. Each conversation was reconstructed from the \textit{dialogue} field into a single string with explicit speaker tags. Tokenization was then applied to the full conversation, with a maximum sequence length of 512 to provide the maximum information context in each chunk, meaning that chunk boundaries could occur in the middle of a message. Conversations exceeding this limit were split into non-overlapping chunks, which could occur at arbitrary positions within the text. Therefore, a single conversation could have multiple chunks, each treated as an independent training example. Finally, dynamic padding was applied at batch time and the tokenized dataset was then passed to the Hugging Face \textit{Trainer} for BERT fine-tuning without additional preprocessing steps such as fixed-length padding or message-boundary control.
+The first preprocessing pipeline was developed to provide a straight BERT baseline for fine-tuning. Each conversation was reconstructed from the \textit{dialogue} field in the data into a single string with explicit speaker tags. Tokenization was then applied to the full conversation, with a maximum length of 512 tokens to provide the maximum information context in each chunk. Chunk boundaries could occur in the middle of a message. Conversations exceeding the 512 limit were split into non-overlapping chunks, which could occur at arbitrary positions within the text. Therefore, a single conversation could have multiple chunks, each treated as an independent training example. Finally, dynamic padding was applied at batch time and the tokenized dataset was then passed to the Hugging Face \textit{Trainer} for BERT fine-tuning without additional preprocessing steps.
+
+%%%geändert 
 
 \subsection{Train-Test Split}
-For the finetuning, a group-level train-test split was applied using \textit{GroupShuffleSplit} from \textit{sklearn}, ensuring that all conversations from a single predator were contained entirely within either the training or test set. This approach prevents data leakage across splits, which could otherwise lead to overoptimistic performance estimates. The split ratio was set to 70\% for training and 30\% for testing. Also, the same ratio of grooming to non-grooming conversations was maintained in both sets to ensure balanced class distributions in the training and train and test data.
+For the finetuning, a train-test split was applied using \textit{GroupShuffleSplit} from \textit{sklearn}, ensuring, that all conversations from a single predator were contained completely in either the training or test set.  The split ratio was set to 70\% for training and 30\% for testing. Also, the same ratio of grooming to non-grooming conversations was kept in both sets to ensure balanced class distributions in the training and train and test data.
 
 The resulting data distribution after chunking is shown in the following table.
 
@@ -24,6 +25,8 @@ Test  & 1330 & 3429   & \textbf{4759} \\
 \end{tabular}
 \end{table}
 
+%%%geändert
+
 \section{BERT fine-tuning as Baseline}
 
 Based on the initial chunking pipeline, BERT was fine-tuned for binary classification. 
@@ -33,14 +36,13 @@ The normal baseline followed a classic fine-tuning pipeline for binary classific
 \begin{itemize}
   \item \textbf{Backbone:} \textit{bert-base-uncased} (standard model dropouts)
   \item \textbf{Chunk length:} 512
-  \item \textbf{Chunking:} tokenizer-based with \textit{return\_overflowing\_tokens=True}, no overlap, no alignment to message boundaries; dynamic padding in batch
   \item \textbf{Trainer/Optimization:} Hugging Face \textit{Trainer}
   \item \textbf{Epochs:} 3
   \item \textbf{Batch Size:} 8 
   \item \textbf{Learning Rate:} \textit{2e-5}
   \item \textbf{Weight Decay:} 0.01
   \item \textbf{Warmup:} none
-  \item \textbf{Gradient Clipping:} not explicitly set
+  \item \textbf{Gradient Clipping:} not set
 \end{itemize}
 
 
@@ -48,7 +50,7 @@ The normal baseline followed a classic fine-tuning pipeline for binary classific
 \subsection{Evaluation Metrics}
 To evaluate the performance of the binary classifier, the most common metrics for a binary classification task were used in \textbf{all the following model evaluations}:
 
-Let $TP$, $FP$, $TN$, and $FN$ denote true positives, false positives, true negatives, and false negatives. 
+Let $TP$, $FP$, $TN$, and $FN$ be true positives, false positives, true negatives, and false negatives. 
 The metrics are defined as follows:
 
 \begin{align}
@@ -58,31 +60,32 @@ The metrics are defined as follows:
 F_{1} &= 2 \cdot \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}.
 \end{align}
 
-Therefore, Accuracy measures the overall proportion of correctly classified instances, while precision measures the fraction of predicted positive instances that are true positives. 
-Recall measures the fraction of actual positive instances that are correctly identified, emphasizing the model's ability to minimize false negatives. 
+Therefore, Accuracy measures the proportion of correctly classified instances, while precision measures the proportion of predicted positive instances that are true positives. 
+Recall measures the fraction of actual positive instances that are correctly identified, showing the model's ability to minimize false negatives. 
 Finally, the $F_{1}$-score is reported as the harmonic mean of precision and recall, providing a balanced measure that accounts for both. 
 
-Since the dataset is slightly imbalanced, the $F_{1}$-score for the positive class is used as the primary metric, ensuring that both precision and recall are equally considered to make the evaluation robust against class imbalance.
+Since the dataset is slightly imbalanced, the $F_{1}$-score for the positive class is used as the primary metric, ensuring that both precision and recall are equally considered for evaluation.
 
 The evaluation was performed every 3000 steps during training, using the test dataset.
 
+%%%geändert
+
 \section{Limitations of Initial BERT Fine-tuning Approach}
 
-\textbf{While the initial fine-tuning apporach enabled a fast and effective baseline, it also raised methodological concerns:}
+\textbf{While the initial fine-tuning apporach enabled an effective baseline, it also included methodological concerns:}
 \begin{enumerate}
-  \item \textbf{Domain Leakage:} Since all PJ conversations carry label 0 and all PAN12 conversations label 1, the model could rely on dataset-specific artifacts (domain leakage) instead of semantic cues. As a result, the model might learn to distinguish between datasets rather than genuine grooming patterns.
-  \item \textbf{Length Leakage:} In addition, PJ conversations are generally longer than the ones from PAN12 (Figure ~\ref{fig:conversation_word_lengths}), making conversation length itself a potential shortcut (length leakage). As a result, the model could exploit systematic length differences rather than learning meaningful grooming-related features.
+  \item \textbf{Domain Leakage:} Since all PJ conversations have label 0 and all PAN12 conversations have label 1, the model could rely on dataset-specific artifacts (domain leakage) instead of semantic cues. As a result, the model might learn to distinguish between datasets rather than real grooming patterns.
+  \item \textbf{Length Leakage:} In addition, PJ conversations are generally longer than the ones from PAN12 (Figure ~\ref{fig:conversation_word_lengths}), making conversation length a potential shortcut (length leakage). As a result, the model could exploit the length differences rather than learning real grooming-related features.
 \end{enumerate}
 
-\textbf{As shown later in the evaluation (Table ~\ref{tab:bert_base}), the initial model indeed achieved very high performance, which motivated the design of a stricter preprocessing pipeline.} Therefore, a second preprocessing script was developed, which introduced fixed-length padding strategies, enforced chunking at message boundaries, and incorporated synthetic non-grooming data in PJ style to reduce both domain and length leakage. The following sections describe this improved pipeline in detail.
+\textbf{As shown later in the evaluation (Table ~\ref{tab:bert_base}), the initial model indeed achieved a very high performance, which motivated the design of a stricter preprocessing pipeline.} Therefore, a second preprocessing script was developed, which introduced fixed-length padding, enforced chunking at message boundaries, and included ynthetic non-grooming data in PJ style to reduce domain and length leakage. The following sections describe this improved pipeline in detail.
 
+%% geändert
 \section{Chunking Strategy for BERT to reduce Domain and Length Leakage}
 
-To mitigate leakage effects and evaluate robustness, a stricter preprocessing pipeline was implemented. Instead of splitting conversations at arbitrary positions, chunks were created only at message boundaries, ensuring that single utterances remained intact.
+To reduce leakage effects, a stricter preprocessing pipeline was implemented. Instead of splitting conversations at arbitrary positions, chunks were created only at message boundaries, ensuring that single utterances remained intact.
 
-During development, additional options such as random left/right padding and random message shuffling were tested. While these techniques can increase robustness by preventing the model from overfitting to position-specific cues, they were not retained in the final pipeline. There were two reasons for this descision: first, later feature fusion with LIWC required that padding positions remain consistent, otherwise token-level interpretability would be undermined. Second, SHAP was planned as an explainability method, and artificially shuffled or randomly padded inputs would have introduced noise, making it harder to attribute predictions to relevant linguistic or psychometric features.
-
-To further mitigate domain leakage and length leakage, synthetic non-grooming chats in PJ style were added (Section~\ref{sec:synthetic-data}). Models were then trained and tested under two complementary setups: 
+To further reduce domain leakage and length leakage, synthetic non-grooming chats in PJ style were added (Section~\ref{sec:synthetic-data}). Models were then trained and tested under the following two setups: 
 
 \begin{enumerate}
   \item \textbf{Separated Split:} With synthetic data only in the test set, to probe generalization.
@@ -92,7 +95,7 @@ To further mitigate domain leakage and length leakage, synthetic non-grooming ch
 
 \subsection{Chunk-Length Distributions (For Train and Test) Across Sequence Lengths}\label{sec:chunk-length-distributions}
 
-To determine the optimal chunk length for a robust BERT baseline the mean, standard deviation, median, minimum, and maximum of tokens per conversation across the different datasets were calculated and are shown in table~\ref{tab:token_stats}. 
+To determine the optimal chunk length for the BERT baseline, the mean, standard deviation, median, minimum, and maximum of tokens per conversation across the different datasets were calculated and are shown in table~\ref{tab:token_stats}. 
 
 \begin{table}[htbp]
 \centering
@@ -111,16 +114,17 @@ ALL (PJ + PAN12 + Synthetic) & 34\,547 & 315.59 & 339.65 & 339.65 & 171  & 1   &
 \end{tabular}
 \end{table}
 
-The statistics show that PJ conversations are generally much longer (mean: 724 tokens, median: 719 tokens) than PAN12 conversations (mean: 210 tokens, median: 144 tokens). The synthetic conversations are even longer (mean: 969 tokens, median: 972 tokens) and thus closer to the PJ distribution. The combined PAN12 + Synthetic dataset has a mean of 227 tokens and a median of 147 tokens, which is still significantly shorter than PJ. Overall, the complete dataset (PJ + PAN12 + Synthetic) has a mean of 316 tokens and a median of 171 tokens.
-
-To fairly evaluate the base model across these regimes, it was decided to test the baseline training with the following three fixed chunk sizes to evaluate if the chunk size has an impact on performance and model robustness:
+As again shown in table~\ref{tab:token_stats}, PJ conversations are much longer (mean: 724 tokens, median: 719 tokens) than PAN12 conversations (mean: 210 tokens, median: 144 tokens). The synthetic conversations are even longer (mean: 969 tokens, median: 972 tokens) and thus closer to the PJ distribution. The combined PAN12 + Synthetic dataset has a mean of 227 tokens and a median of 147 tokens, which is still much shorter than PJ. 
+To evaluate the base model across these datasets, it was decided to test the baseline training with the following three fixed chunk sizes to evaluate, if the chunk size has an impact on performance and model robustness:
 \begin{itemize}
-  \item \textbf{150 tokens:} closely matches the PAN12 median, minimizing fragmentation for PAN12 while providing a compact, compute-efficient context budget.
-  \item \textbf{250 tokens:} offers additional headroom beyond the PAN12 median (covering a larger share of its distribution) and tests whether modestly more context improves performance without a large compute increase.
-  \item \textbf{512 tokens:} targets full-length context for longer PJ/Synthetic conversations, reducing truncation and assessing the payoff of richer context windows.
+  \item \textbf{150 tokens:} closely matches the PAN12 median while minimizing fragmentation for PAN12.
+  \item \textbf{250 tokens:} offers additional context beyond the PAN12 median (covering a larger share of its distribution).
+  \item \textbf{512 tokens:} contains full-length context for longer PJ/Synthetic conversations.
 \end{itemize}
 
-Therefore, multiple target sequence lengths (150, 250, and 512) were generated, and padding on these fixed lengths was applied to test the impact of chunk size on performance, preventing the model from relying on systematic length differences between datasets.
+Consequently, the following three sequence lengths (150, 250, and 512) were generated, and padding on these fixed lengths was applied to test the impact of chunk size on performance, preventing the model from relying only on length differences between datasets.
+
+%%%geändert
 
 Figure~\ref{fig:chunk-dists} shows the resulting chunk length distributions for the three target lengths (150, 250, 512) after applying the improved chunking strategy, to show the impact of different chunk sizes on the dataset. Each subplot displays the distribution of chunk lengths in both training and test sets combined. The orange bars represent grooming chunks collected from PJ, while the blue bars represent non-grooming chunks collected from PAN12. Additionally the green bars show the synthetic non-grooming chunks in PJ style. The Chunk lengths were measured before padding on a fixed size of 512, 250 or 150 chunks was applied.
 
@@ -405,29 +409,80 @@ To analyze the model's decision-making process, SHAP was used to show insights i
 To understand which psycholinguistic features are relevant for the classification decision, a SHAP analysis of the LIWC features was performed. Both the complete LIWC feature set with 118 dimensions and a psychometric subset with 49 selected categories were considered. The fixed-length LIWC vector calculated for each chunk served as input for the analysis. 
 
 \subsubsection{Reducing Computational Costs with KernelSHAP}
-The explanations were generated using KernelSHAP, whereby the text input of the model was capped to a fixed sequence length and kept constant for all explanations. To keep the computational costs of the SHAP analysis manageable, a fixed configuration was used for both the complete LIWC feature set (118 dimensions) and the reduced psychometric subset (49 dimensions). Specifically, \texttt{64} random samples from the test set were selected for explanation. For the background distribution, \texttt{32} LIWC vectors were chosen and reduced to at most 20 representative centroids using k-means clustering. Each instance was then perturbed \texttt{256} times in order to approximate the marginal feature contributions. 
+The explanations were generated using KernelSHAP, whereby the text input of the model was capped to a fixed sequence length and kept constant for all explanations. To keep the computational costs of the SHAP analysis manageable, a fixed configuration was used for both the complete LIWC feature set (118 dimensions) and the reduced psychometric subset (49 dimensions).  \texttt{3000} random samples from the test set were selected for explanation. To mitigate class-imbalance bias, all global statistics are computed on a \textbf{class-balanced subset} of the test set (50\% grooming, 50\% non-grooming). For the background distribution, \texttt{32} LIWC vectors were chosen and reduced to at most 20 representative centroids using k-means clustering. Each instance was then perturbed \texttt{256} times in order to approximate the marginal feature contributions. 
 
 The model was executed in mini-batches of \textit{4} explanations, with a maximum of \textit{16} perturbations processed in parallel. In addition, the text input was capped to a constant sequence length of \texttt{64} tokens, and inference was carried out in mixed precision with disabled gradients. These measures reduced GPU memory consumption and made it feasible to perform KernelSHAP for both feature sets without exceeding hardware limits.
 
-\subsubsection{Determing Feature Importance and Direction of Effect}
+\subsubsection{Determining Feature Importance and Direction of Effect}
 
-For each instance in the test dataset, the prediction for the positive grooming class was explained. SHAP determines how much the model prediction changes when a single LIWC feature is neutralized. A high SHAP value indicates that this feature contributed significantly to the decision. In this way, the \textbf{mean absolute} SHAP value (\emph{mean $|$SHAP$|$}) was calculated for each LIWC feature, describing the global importance of the feature. To make the results easier to interpret, these values were then converted into percentages of the total significance:
+The model’s \emph{grooming} (positive) logit was explained using KernelSHAP while the \textbf{text representation was held fixed} and only the LIWC feature vector was perturbed.
 
+\paragraph{Global importance.}
+For each LIWC feature $i$, the contribution over the balanced subset was aggregated via the \textbf{mean absolute} SHAP value, $\mathrm{mean}|\mathrm{SHAP}|_i$, and reported as normalized percentages for readability:
 \[
-\text{FeatureImportance}_{i} = \frac{\text{mean}\,|SHAP|_{i}}{\sum_{j=1}^{F} \text{mean}\,|SHAP|_{j}} \times 100 \%
+\text{FeatureImportance}_{i}
+= \frac{\mathrm{mean}\,|\mathrm{SHAP}|_{i}}{\sum_{j=1}^{F} \mathrm{mean}\,|\mathrm{SHAP}|_{j}} \times 100\% ,
+\]
+where $F$ is the number of LIWC features. This quantifies the share of the model’s decision attributable to feature $i$.
+
+Based on the global Importance, the commulative importance of every LIWC features were determined by sorting the features descendingly and calculating the cumulative sum of the importance values. 
+
+\paragraph{Direction of effect.}
+\textbf{Signed} SHAP values according to the grooming logit indicate direction:
+\[
+\mathrm{SHAP}^{(+)}_{i} > 0 \;\Rightarrow\; \text{feature } i \text{ pushes the prediction toward grooming,}
+\]
+\[
+\mathrm{SHAP}^{(+)}_{i} < 0 \;\Rightarrow\; \text{feature } i \text{ pushes the prediction toward non-grooming.}
 \]
 
-where \(F\) is the number of LIWC features. This shows the percentage of the total model decision that can be explained by a single feature (Figure \ref{fig:global_feature_importance_combined}).
+\subsubsection{Partitioning overall contribution into tokens vs.\ LIWC}\label{sec:token_vs_liwc_share}
 
-In addition, the \textbf{mean signed} SHAP value was determined to indicate the direction of the effect.
-Therefore \textbf{a positive SHAP value means the feature pushes the prediction toward the positive class (grooming), while a negative SHAP value means it pushes toward the negative class (non-grooming). Thus, higher projected values indicate more grooming-like language, lower values indicate more non-grooming-like language.}
-The results were summarized in several steps and can be found in section \ref{sec:ablation_studies_shap}.
+To quantify the relative contribution of text tokens versus LIWC features to the model's decisions, two complementary attribution procedures were computed on the same set of explained instances and subsequently paired.
 
+\paragraph{Token-side attribution (Integrated Gradients).}
+For each instance, token-level attributions were obtained with Integrated Gradients on the embedding input.
+A zero embedding served as baseline, and attributions were computed with regard to the model's predicted class.
+Let $a_{n,t}\in\mathbb{R}^d$ denote the IG vector for token $t$ in instance $n$ (embedding dimension $d$).
+A scalar saliency per token was formed via the $\ell_2$ norm and aggregated across tokens to give a per-instance token total:
+\[
+S^{\mathrm{tok}}_{n}
+\;=\;
+\sum_{t} \lVert a_{n,t}\rVert_2.
+\]
+During IG, the LIWC branch was held fixed to a constant vector (median over the sidecar features) to avoid confounding text and LIWC effects.
+
+\paragraph{LIWC-side attribution (KernelSHAP).}
+For the same instances, LIWC attributions was again computed with KernelSHAP by varying the LIWC feature vector while keeping the text input fixed to a short sequence.
+Let $\phi_{n,f}$ denote the SHAP value of LIWC feature $f$ for instance $n$.
+Per-instance LIWC totals were formed by summing absolute SHAP values across features:
+\[
+S^{\mathrm{liwc}}_{n}
+\;=\;
+\sum_{f=1}^{F} \lvert \phi_{n,f}\rvert .
+\]
+
+Because the classifier has two output classes, KernelSHAP returns one attribution per class. Therefore class-agnostic attributions were used by averaging the absolute SHAP values across classes for each instance and feature before aggregation.
+
+\paragraph{Pairing and normalization.}
+For each explained instance \(n\), the two totals were combined into percentage shares:
+\[
+\mathrm{Share}^{\mathrm{liwc}}_{n}
+\;=\;
+\frac{S^{\mathrm{liwc}}_{n}}{S^{\mathrm{liwc}}_{n}+S^{\mathrm{tok}}_{n}}
+\;\times\;100\%,
+\qquad
+\mathrm{Share}^{\mathrm{tok}}_{n}
+\;=\;
+\frac{S^{\mathrm{tok}}_{n}}{S^{\mathrm{liwc}}_{n}+S^{\mathrm{tok}}_{n}}
+\;\times\;100\% .
+\]
+Global summaries were reported as the mean and median of these per-instance percentages over \(N=1000\) randomly sampled test instances.
 
 
 \subsection{Confidence Analysis based on Label Flip and Confidence Shift}
 
-In order to further investigate the impact of LIWC features on model decisions, model confidence and class assignment were calculated once with the regular LIWC feature vectors (\emph{LIWC on}) and once with LIWC vectors set to zero (\emph{LIWC off}). This allowed the influence of the additional LIWC features on model confidence and class assignment to be analyzed.
+To further analyze the impact of LIWC features on model decisions, model confidence and class assignment were calculated once with the regular LIWC feature vectors (\emph{LIWC on}) and once with LIWC vectors set to zero (\emph{LIWC off}). This allowed the influence of the additional LIWC features on model confidence and class assignment to be analyzed.
 
 For both conditions, the class probability was determined by applying the softmax function to the logits. The highest probability \(p_{\max}\) represents the model confidence for the predicted class:
 \[
@@ -507,28 +562,36 @@ The results of the LIWC analysis of misclassifications are presented in section 
 
 For a deeper analysis of misclassifications, an evaluation was performed based on the \textbf{top 20 LIWC features}, which were identified in Section~\ref{sec:shap_analysis_of_liwc_features} as the most relevant using global SHAP values (\emph{mean\_abs}) and explain the majority of model decisions. This allows examining whether misclassifications can be explained by their proximity to the opposite correct class along these LIWC dimensions. Also, focusing on the 20 most important features reduces noise from less informative variables and enables a more targeted analysis of group differences.
 
-\paragraph{Top-K selection and SHAP direction.}
+\paragraph{Top-20 selection and SHAP direction.}
 All LIWC-2022 features were globally ranked by their \emph{mean\_abs} SHAP values, and the top 20 were selected. In addition, the SHAP sign (\emph{mean\_signed}) was used for each feature to define the “TP-like” versus “TN-like” direction.
 
+All LIWC-2022 features were globally ranked by their \emph{mean\_abs} SHAP values on a class-balanced subset (50\% grooming, 50\% non-grooming), and the top 20 were selected. For each feature, the SHAP sign (\emph{mean\_signed}) with respect to the grooming logit was used to define the “TP-like” versus “TN-like” direction.
+
 \paragraph{Z-scaling and SHAP-oriented projection.}
-To ensure comparability, feature columns were z-scaled. The values were then multiplied \emph{per sample} by the SHAP sign (\(+1\) or \(-1\)). On this aligned axis, values \emph{to the right of \(x=0\)} correspond to greater TP similarity, while values \emph{to the left of \(x=0\)} indicate greater TN similarity. The dashed vertical line at \(x=0\) in the plots marks this separation threshold.
+To ensure comparability, feature columns were $z$-scaled. Each feature was then \emph{projected} onto the SHAP direction by multiplying, per sample, with the sign of its \emph{per-class SHAP margin}, i.e.\ $\operatorname{sign}(\Delta\mathrm{SHAP}_i)$ with
+$\Delta\mathrm{SHAP}_i = \mathrm{SHAP}^{(+)}_i - \mathrm{SHAP}^{(-)}_i$ (grooming = $+$, non-grooming = $-$; default class indices 1 and 0). On this aligned axis, values to the right of $x=0$ indicate greater similarity to true positives (TP-like), and values to the left indicate greater similarity to true negatives (TN-like). In both cases, multiplying $z$-scaled feature values by this sign yields a SHAP-aligned axis where values $>0$ are TP-like and values $<0$ are TN-like.
+
 
 \paragraph{Group statistics and confidence intervals.}
-For each group (\(\{\mathrm{TP}, \mathrm{TN}, \mathrm{FP}, \mathrm{FN}\}\)) and each top-K feature, group means \(\bar{x}\), standard deviations \(s\), and standard errors
+For each group $\{\mathrm{TP}, \mathrm{TN}, \mathrm{FP}, \mathrm{FN}\}$ and each top-$K$ feature, group means $\bar{x}$, standard deviations $s$, and standard errors
 \[
 SE \;=\; \frac{s}{\sqrt{n}}
 \]
-with \(n\) as the group size were calculated. For the misclassification groups (FP and FN), a 95\% confidence interval was then computed:
+with $n$ as the group size were calculated on the projected values. For the misclassification groups (FP and FN), a 95\% confidence interval was computed as
 \[
 \mathrm{CI}_{95} \;=\; \bar{x} \pm 1.96 \cdot SE.
 \]
-The position of this CI relative to \(x=0\) was classified as:
-\begin{itemize}
-  \item \emph{TP-side}: \(\mathrm{CI}_{95}\) lies completely to the right of 0 (clearly TP-like),
-  \item \emph{TN-side}: \(\mathrm{CI}_{95}\) lies completely to the left of 0 (clearly TN-like),
-  \item \emph{crosses-0}: \(\mathrm{CI}_{95}\) includes 0 (ambiguous),
-  \item \emph{unknown}: no CI could be computed (e.g., missing SE).
-\end{itemize}
+The position of this interval relative to $x=0$ was classified as:
+\emph{TP-side} (entirely $>0$), \emph{TN-side} (entirely $<0$), \emph{crosses-0} (ambiguous), or \emph{unknown} (no SE/CI available).
+
+\paragraph{Proximity rule (TP/TN closeness).}
+To assess whether misclassifications align more with TP or TN, per feature the absolute distances on the projected axis were compared:
+\[
+d_{\mathrm{FP}\to\mathrm{TP}} \;=\; \bigl|\bar{x}_{\mathrm{FP}} - \bar{x}_{\mathrm{TP}}\bigr|,\quad
+d_{\mathrm{FP}\to\mathrm{TN}} \;=\; \bigl|\bar{x}_{\mathrm{FP}} - \bar{x}_{\mathrm{TN}}\bigr|,
+\]
+and analogously for FN. A feature is counted as “FP closer to TP” if $d_{\mathrm{FP}\to\mathrm{TP}} < d_{\mathrm{FP}\to\mathrm{TN}}$, and as “FN closer to TN” if $d_{\mathrm{FN}\to\mathrm{TN}} < d_{\mathrm{FN}\to\mathrm{TP}}$. Summary rates are reported over the top-20 features. 
+
 
 \paragraph{Proximity rate (distance logic).}
 Additionally, for each feature it was assessed which correct class the misclassifications were closer to. This was determined using the distances between the misclassification mean \(\bar{x}_{\mathrm{MC}}\) and the TP or TN means:
