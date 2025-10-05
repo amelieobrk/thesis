@@ -519,13 +519,6 @@ The results are presented in Section ~\ref{sec:confidence_and_label_flip_analysi
 
 To identify potential patterns in the misclassifications made by the feature fusion model, a LIWC analysis of false positives and false negatives was conducted. It was tested whether misclassified samples resemble the opposite correct class in LIWC space, i.e., whether false negatives are closer to true negatives and false positives are closer to true positives according to their LIWC Feature values. Furthermore, it was analyzed which LIWC features differ significantly between misclassified and correctly classified samples. This analysis was again conducted with both the full LIWC feature set and the psychometric subset. The same fusion model, tokenizer, and LIWC sidecar vectors as in the previous sections were used to generate predictions and per-sample LIWC vectors. The analysis was performed on the complete test set.
 
-\subsection{Descriptive per-group statistics}
-For each LIWC feature and each confusion group \(g \in \{\mathrm{TN},\mathrm{TP},\mathrm{FP},\mathrm{FN}\}\), the following descriptive statistics were computed over the per-sample values:
-\[
-\text{count},\;\text{mean},\;\text{std},\;\text{median},\;\text{q1 (25th)},\;\text{q3 (75th)},\;\text{min},\;\text{max}.
-\]
-These summaries describe central tendency and spread within groups and are used as context for the inferential tests below. The complete summary statistics for all LIWC features are provided in the appendix (table \ref{tab:liwc22-misclassification-stats}).
-
 \subsection{Per-feature group comparisons}
 Per-feature comparisons were run for four group pairs: FP vs.\ TN, FN vs.\ TP, TN vs.\ FN, and TP vs.\ FP. For each LIWC feature \(f\), let \(x\) denote values in the first named group and \(y\) in the second. The following statistics were computed:
 
@@ -584,22 +577,13 @@ with $n$ as the group size were calculated on the projected values. For the misc
 The position of this interval relative to $x=0$ was classified as:
 \emph{TP-side} (entirely $>0$), \emph{TN-side} (entirely $<0$), \emph{crosses-0} (ambiguous), or \emph{unknown} (no SE/CI available).
 
-\paragraph{Proximity rule (TP/TN closeness).}
+\paragraph{Proximity rate (TP/TN closeness).}
 To assess whether misclassifications align more with TP or TN, per feature the absolute distances on the projected axis were compared:
 \[
 d_{\mathrm{FP}\to\mathrm{TP}} \;=\; \bigl|\bar{x}_{\mathrm{FP}} - \bar{x}_{\mathrm{TP}}\bigr|,\quad
 d_{\mathrm{FP}\to\mathrm{TN}} \;=\; \bigl|\bar{x}_{\mathrm{FP}} - \bar{x}_{\mathrm{TN}}\bigr|,
 \]
 and analogously for FN. A feature is counted as “FP closer to TP” if $d_{\mathrm{FP}\to\mathrm{TP}} < d_{\mathrm{FP}\to\mathrm{TN}}$, and as “FN closer to TN” if $d_{\mathrm{FN}\to\mathrm{TN}} < d_{\mathrm{FN}\to\mathrm{TP}}$. Summary rates are reported over the top-20 features. 
-
-
-\paragraph{Proximity rate (distance logic).}
-Additionally, for each feature it was assessed which correct class the misclassifications were closer to. This was determined using the distances between the misclassification mean \(\bar{x}_{\mathrm{MC}}\) and the TP or TN means:
-\[
-d_{\mathrm{TP}} = \lvert \bar{x}_{\mathrm{MC}} - \bar{x}_{\mathrm{TP}} \rvert, \qquad
-d_{\mathrm{TN}} = \lvert \bar{x}_{\mathrm{MC}} - \bar{x}_{\mathrm{TN}} \rvert.
-\]
-For \textbf{FP}, features with \(d_{\mathrm{TP}} < d_{\mathrm{TN}}\) (closer to TP) were counted. For \textbf{FN}, features with \(d_{\mathrm{TN}} < d_{\mathrm{TP}}\) (closer to TN) were counted. The proportion across all top-K features yields the \emph{proximity rate} (e.g., 0.75 = 75\% of features support the expected proximity).
 
 \paragraph{Summary measures.}
 The following aggregated values were derived:

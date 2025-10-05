@@ -134,7 +134,7 @@ After initial preprocessing, the length distributions of the raw conversations i
 
 \section{Generating Synthetic Non-Grooming Data}\label{sec:synthetic-data}
 
-To further increase model robustness and mitigate dataset-specific artifacts, a custom script was developed that uses the OpenAI API (\textit{gpt-4.1-mini}) to generate synthetic negative examples in the style of the Perverted Justice (PJ) data. The employed prompt contained the following rules:
+To further increase model robustness and mitigate dataset-specific artifacts, a custom script was developed that  uses the OpenAI API (\textit{gpt-4.1-mini}) to generate synthetic negative examples in the style of the Perverted Justice (PJ) data. The employed prompt contained the following rules:
 \begin{enumerate}
 \item \textbf{Replicate the linguistic style of PJ chats} by providing the model with 100 already normalized PJ conversations as few-shot examples.
 \item \textbf{Enforce strict formatting}, requiring every line to follow the pattern \textit{speaker\_1: \textless text \textgreater} or \textit{speaker\_2: \textless text \textgreater}.
