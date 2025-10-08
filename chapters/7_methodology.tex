@@ -231,7 +231,7 @@ Based on the evaluation across different chunk sizes and dataset configurations 
   \item \textbf{Social}: \textit{Social}, \textit{socbehav}, \textit{prosocial}, \textit{polite}, \textit{conflict}, \textit{moral}, \textit{comm}, \textit{socrefs}, \textit{family}, \textit{friend}, \textit{female}, \textit{male}
   \item \textbf{Physical/Biological}: \textit{Physical}, \textit{health}, \textit{illness}, \textit{wellness}, \textit{mental}, \textit{substances}, \textit{sexual}, \textit{food}, \textit{death}
 \end{itemize}
-\textbf{The idea for this two-staged approach was to evaluate whether a set of only psycholinguistically relevant features could provide similar or better interpretability and performance compared to using the full LIWC-2022 feature set.} 
+\textbf{The idea for this two-staged approach was to evaluate whether a set of only psycholinguistically relevant features could provide similar or better interpretability and performance compared to using the full LIWC-2022 feature set. Note that summary variables such as Tone and Clout were not included in the psychometric subset, as they are derived composite metrics rather than lexical categories and would have confounded word level interpretability. } 
 
 
 \section{LIWC Data Extraction}
@@ -298,14 +298,12 @@ The results of the global LIWC analysis are presented in the evaluation section 
 
 \subsection{Chunk-based LIWC Analysis with 512 Tokens}
 
-To examine patterns within conversations, a chunk-based analysis was performed with a fixed chunk size of 512 tokens (identical to the size later used for model training). For each chunk, a LIWC-2022 feature vector was calculated and the average values per class were determined across all chunks. also based on the data level , which
+To examine patterns within conversations, a chunk-based analysis was performed with a fixed chunk size of 512 tokens (identical to the size later used for fusion model training). For each chunk, a LIWC-2022 feature vector was calculated and the average values per class were determined across all chunks. Also, based on the data level , which
 For each feature, the range
 \[
 \mathrm{range}(f) = \max_{s}\overline{f}_{s} - \min_{s}\overline{f}_ {s}
 \]
-was determined for each feature across all sources (\(s \in \{\mathrm{PJ}, \mathrm{PAN12}, \mathrm{SYN}\}\)), and the \(K=15\) features with the largest ranges were selected for visualization.
-Two heatmaps were created: one limited to these 15 most important distinguishing features and one containing all available features (in alphabetical order).The rows represent PJ Grooming, Synthetic Non-Grooming, and PAN12 Non-Grooming, while the columns represent the LIWC features.
-This process was repeated once for all LIWC features and once for the psychometric features to determine whether psychometric variables alone exhibit comparable distinction at the chunk level.
+was determined for each feature across all sources (\(s \in \{\mathrm{PJ}, \mathrm{PAN12}, \mathrm{SYN}\}\)), and the \(K=15\) features, again based on Cohen's \(d\) \cite{cohen1988} with the largest ranges between the PJ and PAN12 data were selected for visualization, as PJ and PAN12 together comprise the majority of the training corpus (>\,80\%) and the analysis is intended to prioritize natural (non-synthetic) data.  This process was repeated once for all LIWC features and once for the psychometric features to determine whether psychometric variables alone exhibit comparable distinction at the chunk level.
 
 The visualization and evaluation of the chunk-based LIWC analysis is presented in section~\ref{sec:chunk_based_liwc_analysis}.
 
