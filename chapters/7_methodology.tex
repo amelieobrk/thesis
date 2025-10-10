@@ -223,15 +223,20 @@ Based on the evaluation across different chunk sizes and dataset configurations 
     \item \textbf{Psychometric-Fusion}: Use of a subset of \textbf{49 psychometric LIWC features} coverings all psycholinguistic LIWC features that are highlighted in the literature as relevant for manipulative communication in Grooming Chats (Section \ref{psychometric_liwc_features_in_grooming}). The subset contains the following categories and dimensions:
 \end{enumerate}
 
-\paragraph{Psychometric LIWC Subset (49 features).}
+\paragraph{Psychometric LIWC Subset (49 features):}
 \begin{itemize}
-  \item \textbf{Drives}: \textit{Drives}, \textit{affiliation}, \textit{achieve}, \textit{power}, \textit{reward}, \textit{risk}, \textit{curiosity}, \textit{allure}
-  \item \textbf{Cognition}: \textit{Cognition}, \textit{allnone}, \textit{cogproc}, \textit{insight}, \textit{cause}, \textit{discrep}, \textit{tentat}, \textit{certitude}, \textit{differ}, \textit{memory}
-  \item \textbf{Affect \& Emotion}: \textit{Affect}, \textit{tone\_pos}, \textit{tone\_neg}, \textit{emotion}, \textit{emo\_pos}, \textit{emo\_neg}, \textit{emo\_anx}, \textit{emo\_anger}, \textit{emo\_sad}, \textit{swear}
-  \item \textbf{Social}: \textit{Social}, \textit{socbehav}, \textit{prosocial}, \textit{polite}, \textit{conflict}, \textit{moral}, \textit{comm}, \textit{socrefs}, \textit{family}, \textit{friend}, \textit{female}, \textit{male}
-  \item \textbf{Physical/Biological}: \textit{Physical}, \textit{health}, \textit{illness}, \textit{wellness}, \textit{mental}, \textit{substances}, \textit{sexual}, \textit{food}, \textit{death}
+  \item \textbf{Drives}: \textit{Affiliation}, \textit{Achievement}, \textit{Power}, \textit{Reward}, \textit{Risk}, \textit{Curiosity}, \textit{Allure}
+  \item \textbf{Cognition}: \textit{All-or-none}, \textit{Cognitive Processes}, \textit{Insight}, \textit{Causation}, \textit{Discrepancy}, \textit{Tentative}, \textit{Certitude}, \textit{Differentiation}, \textit{Memory}
+  \item \textbf{Affect \& Emotion}: \textit{Affect}, \textit{Positive Tone}, \textit{Negative Tone}, \textit{Emotion}, \textit{Positive Emotion}, \textit{Negative Emotion}, \textit{Anxiety}, \textit{Anger}, \textit{Sadness}, \textit{Swear Words}
+  \item \textbf{Social}: \textit{Social Behavior}, \textit{Prosocial Behavior}, \textit{Politeness}, \textit{Interpersonal Conflict}, \textit{Moralization}, \textit{Communication}, \textit{Social Referents}, \textit{Family}, \textit{Friends}, \textit{Female References}, \textit{Male References}
+  \item \textbf{Physical/Biological}: \textit{Health}, \textit{Illness}, \textit{Wellness}, \textit{Mental Health}, \textit{Substances}, \textit{Sexual}, \textit{Food}, \textit{Death}
 \end{itemize}
-\textbf{The idea for this two-staged approach was to evaluate whether a set of only psycholinguistically relevant features could provide similar or better interpretability and performance compared to using the full LIWC-2022 feature set. Note that summary variables such as Tone and Clout were not included in the psychometric subset, as they are derived composite metrics rather than lexical categories and would have confounded word level interpretability. } 
+
+This subset was designed to isolate psychologically interpretable features related to emotional, cognitive, motivational, and social functioning. 
+The corresponding superordinate categories (for example \textit{Cognition}, \textit{Affect}, \textit{Social}) were retained not only because they are automatically computed together with their subdimensions, but also because they provide psychologically meaningful aggregation levels allowing to identify, which broader psychological domains (for example cognitive versus affective language) contribute most strongly, even when individual subcategories show smaller or inconsistent effects. 
+
+In contrast, \textbf{summary variables} such as \textit{Tone}, \textit{Analytic}, \textit{Clout}, and \textit{Authentic} were excluded from this psychometric subset. These dimensions primarily reflect \textit{stylistic and structural} characteristics of language rather than \textit{psychometric} content~\cite{boyd2022liwc22, TausczikPennebaker2010}. 
+Their exclusion ensures that the subset focuses on lexical and psychologically meaningful word categories rather than composite style based indicators. Still, the summary variables were included in the all-features-fusion variant to evaluate their potential contribution to classification performance.
 
 
 \section{LIWC Data Extraction}
@@ -252,21 +257,22 @@ For each conversation, the complete set of LIWC-2022 features was calculated.
 To improve interpretability, the features were grouped into macro categories according to the LIWC-2022 manual:
 
 \begin{itemize}
-    \item \textbf{Linguistic:} Function, pronoun, ppron, i, we, you, shehe, they, ipron, det, article, numeral, preposition, auxiliary verb, adverb, conjunction, negation, verb, adjective, quantity
-    \item \textbf{Punctuation:} Period, comma, question mark, exclamation mark, apostrophe, other
-    \item \textbf{Emoji:} Emoji
-    \item \textbf{Drives:} Belonging, Achievement, Power
-    \item \textbf{Motivation:} Reward, Risk, Curiosity, Enticement
-    \item \textbf{Cognition:} Cognition, allnone, cogproc, Insight, Cause, Discrepancy, Attempt, Certainty, Difference, Memory
-    \item \textbf{Affect:} Positive tone of voice, negative tone of voice, emotion, positive emotion, negative emotion, fear, anger, sadness, swearing
-    \item \textbf{Social:} Social behavior, prosocial, polite, conflict, morality, communication, social references, family, friend, female, male, social
-    \item \textbf{Physical:} Health, illness, well-being, mental, substances, sexual, food, death, physical
-    \item \textbf{Perception:} Attention, movement, space, visual, auditory, feeling
-    \item \textbf{Culture:} Politics, ethnicity, technology
-    \item \textbf{States:} Need, desire, acquisition, lack, fulfillment, fatigue
-    \item \textbf{Time:} Time, focus on the past, focus on the present, focus on the future
-    \item \textbf{Conversation:} Internet slang, agreement, non-fluency, filler words
+    \item \textbf{Linguistic:} Function words, Pronouns, Personal pronouns, First person singular, First person plural, Second person, Third person singular, Third person plural, Impersonal pronouns, Determiners, Articles, Numbers, Prepositions, Auxiliary verbs, Adverbs, Conjunctions, Negations, Common verbs, Common adjectives, Quantities
+    \item \textbf{Punctuation:} Periods, Commas, Question marks, Exclamation marks, Apostrophes, Other punctuation
+    \item \textbf{Emoji:} Emojis
+    \item \textbf{Drives:} Affiliation, Achievement, Power
+    \item \textbf{Motivation:} Reward, Risk, Curiosity, Allure
+    \item \textbf{Cognition:} Cognitive processes, All-or-none thinking, Insight, Causation, Discrepancy, Tentativeness, Certitude, Differentiation, Memory
+    \item \textbf{Affect:} Positive tone, Negative tone, Emotion, Positive emotion, Negative emotion, Anxiety, Anger, Sadness, Swear words
+    \item \textbf{Social:} Social behavior, Prosocial behavior, Politeness, Interpersonal conflict, Moralization, Communication, Social referents, Family, Friends, Female references, Male references, Social processes
+    \item \textbf{Physical:} Health, Illness, Well Being, Mental health, Substances, Sexual, Food, Death, Physical processes
+    \item \textbf{Perception:} Attention, Motion, Space, Visual perception, Auditory perception, Feeling (perceptual)
+    \item \textbf{Culture:} Politics, Ethnicity, Technology
+    \item \textbf{States:} Need, Want, Acquire, Lack, Fulfilled, Fatigue
+    \item \textbf{Time:} Time, Past focus, Present focus, Future focus
+    \item \textbf{Conversation:} Netspeak, Assent, Nonfluencies, Fillers
 \end{itemize}
+
 
 For each conversation, the value of a macro group was defined as the arithmetic mean of all available member characteristics. Subsequently, the macro group means were averaged across all conversations for each class (PJ vs. PAN12). 
 The results were visualized as grouped bar charts (PJ vs. PAN12) sorted by the overall mean \(\tfrac{1}{2}(\overline{g}_{\mathrm{PJ}}+\overline{g}_{\mathrm{PAN}})\) .
