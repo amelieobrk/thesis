@@ -3,7 +3,7 @@
 For this thesis, data from two different sources was collected and processed: the \textit{Perverted Justice} (PJ) archive and the PAN12 Sexual Predator Identification dataset.
 
 \section{PAN12 Dataset}
-The PAN12 Sexual Predator Identification Corpus was introduced by Inches and Crestani as part of CLEF 2012 and represents the first large-scale benchmark dataset for the automatic detection of sexual predators in chat conversations~\cite{inches2012pan}. The PAN12 dataset was designed for two specific tasks: First, identifying sexual predators among all users, and second, detecting specific chat lines that are most characteristic of predatory behavior. It remains a reference benchmark in cyber grooming detection and has been employed in a lot of follow-up studies \cite{inches2012pan}.
+The PAN12 Sexual Predator Identification Corpus was introduced by Inches and Crestani as part of CLEF 2012 and represents the first large-scale benchmark dataset for the automatic detection of sexual predators in chat conversations~\cite{inches2012pan}. The PAN12 dataset was designed for two specific tasks: First, identifying sexual predators among all users, and second, detecting specific chat lines that are most characteristic of predatory behavior. It remains a reference benchmark in cyber grooming detection and has been employed in a lot of follow-up studies~\cite{inches2012pan}.
 
 The collection combines four distinct sources: 
 
@@ -54,8 +54,8 @@ A big challenge of the Pan12 dataset is the \textbf{class imbalance}, as only a 
 %% geändert
 
 \section{Perverted Justice (PJ) Dataset}
-The Perverted Justice (PJ) dataset \cite{pj} is based on chat logs collected by the U.S.-based Perverted Justice Foundation (PJFI), which undertook a proactive approach in the detection of online sexual predators. They trained adult volunteers posed as young people (decoy victims) in chat rooms and engaged in conversations with adults who have sexual intentions towards minors and to record these interactions. The goal was to identify and report potential predators to law enforcement agencies. Once the adult was convicted in an American Court of Law, the Foundation made all the material related to them available online for public access. The PJ dataset consists of chat logs from over 600 confirmed grooming cases, with each conversation containing multiple messages. The conversations are typically structured as dialogues between a decoy victim and an adult groomer. PJ data has been used in nearly all major peer-reviewed studies on automatic grooming detection and form the basis for the positive class in the PAN12 dataset. \cite{inches2012pan} 
-The organisation ended its operations in 2019 following public criticism because of the controversial nature of its methods and the potential risks to decoy victims. Therefore, the original PJ dataset is no longer publicly available. However, archived chat logs remain available upon request for research purposes. \cite{pj}
+The Perverted Justice (PJ) dataset~\cite{pj} is based on chat logs collected by the U.S.-based Perverted Justice Foundation (PJFI), which undertook a proactive approach in the detection of online sexual predators. They trained adult volunteers posed as young people (decoy victims) in chat rooms and engaged in conversations with adults who have sexual intentions towards minors and to record these interactions. The goal was to identify and report potential predators to law enforcement agencies. Once the adult was convicted in an American Court of Law, the Foundation made all the material related to them available online for public access. The PJ dataset consists of chat logs from over 600 confirmed grooming cases, with each conversation containing multiple messages. The conversations are typically structured as dialogues between a decoy victim and an adult groomer. PJ data has been used in nearly all major peer-reviewed studies on automatic grooming detection and form the basis for the positive class in the PAN12 dataset.~\cite{inches2012pan} 
+The organisation ended its operations in 2019 following public criticism because of the controversial nature of its methods and the potential risks to decoy victims. Therefore, the original PJ dataset is no longer publicly available. However, archived chat logs remain available upon request for research purposes.~\cite{pj}
 
 %geändert
 
@@ -85,13 +85,13 @@ To create a reliable negative class, a filtered subset of the PAN12 dataset was 
     \item \textbf{Participant \& length constraints:} Only conversations with exactly two participants and a minimum of 8 messages were kept.
     \item \textbf{Spam removal \& quality filtering:} An additional manual filtering step excluded problematic cases:
     \begin{itemize}
-        \item Extremely short, non-linguistic messages (e.g., \enquote{m}, \enquote{e}, \enquote{?\_?}).
-        \item Symbolic or spam-like ASCII sequences (e.g., \enquote{yearyearyear\ldots} or repeated \enquote{WARNING} messages).
-        \item Excessively long sequences that could not be meaningfully tokenized or chunked (e.g., single messages with over 512 tokens).
+        \item Extremely short, non-linguistic messages (for example \enquote{m}, \enquote{e}, \enquote{?\_?}).
+        \item Symbolic or spam-like ASCII sequences (for example \enquote{yearyearyear\ldots} or repeated \enquote{WARNING} messages).
+        \item Excessively long sequences that could not be meaningfully tokenized or chunked (for example single messages with over 512 tokens).
     \end{itemize}
 \end{itemize}
 
-For the PAN12 dataset, anonymization was already conducted during dataset creation. As stated by Inches and Giacomo~\cite{inches2012pan}, all personal identifiers (e.g., names, emails, phone numbers, URLs) were removed or replaced by synthetic placeholders prior to release. After all preprocessing and filtering steps, the resulting PAN12 non-grooming dataset contained \textbf{27,755} full conversations.
+For the PAN12 dataset, anonymization was already conducted during dataset creation. As stated by Inches and Giacomo~\cite{inches2012pan}, all personal identifiers (for example names, emails, phone numbers, URLs) were removed or replaced by synthetic placeholders prior to release. After all preprocessing and filtering steps, the resulting PAN12 non-grooming dataset contained \textbf{27,755} full conversations.
 
 All further preprocessing steps were applied across both datasets and integrated into the pipeline prior to modeling.
 
@@ -99,26 +99,26 @@ All further preprocessing steps were applied across both datasets and integrated
 
 For preprocessing the chat data, a script was developed that uses the OpenAI API (\textit{gpt-4.1-mini}) to perform slang normalization. The employed prompt specified the following rules:
 \begin{enumerate}
-    \item \textbf{Replace slang, internet abbreviations, and leetspeak} (e.g., \textit{wanna} $\rightarrow$ ``want to'', \textit{ur} $\rightarrow$ ``you'') with their standard English equivalents.
-    \item \textbf{Resolve predefined placeholders} according to a mapping table (e.g., \textit{\_\_laugh\_\_} $\rightarrow$ ``haha'', \textit{\_\_thinking\_\_} $\rightarrow$ ``hmm'').
+    \item \textbf{Replace slang, internet abbreviations, and leetspeak} (for example \textit{wanna} $\rightarrow$ ``want to'', \textit{ur} $\rightarrow$ ``you'') with their standard English equivalents.
+    \item \textbf{Resolve predefined placeholders} according to a mapping table (for example \textit{\_\_laugh\_\_} $\rightarrow$ ``haha'', \textit{\_\_thinking\_\_} $\rightarrow$ ``hmm'').
     \item \textbf{Correct obvious spelling and grammar mistakes}.
-    \item \textbf{Do not modify} emojis, emoticons, or stylistic punctuation sequences (e.g., \textit{:P}, \textit{XD}, \textit{??}).
+    \item \textbf{Do not modify} emojis, emoticons, or stylistic punctuation sequences (for example \textit{:P}, \textit{XD}, \textit{??}).
     \item \textbf{Preserve} the informal style and emotional tone, including explicit or manipulative language.
 \end{enumerate}
 
 This normalization was performed \emph{prior} to fine-tuning BERT for the following three key reasons:
 
 \paragraph{Avoiding source effects.}  
-The dataset combines conversations from different sources (PAN12 and PJ). Without normalization, the model could exploit differences in slang usage as a shortcut, instead of learning actual grooming-related patterns. Therefore, it might be the case that it is too easy for the model to learn the decision boundary for these two classes, not because the model is good at detecting sexual predators, but because these two datasets were generated in different ways. \parencite{schlaepfer2022online}
+The dataset combines conversations from different sources (PAN12 and PJ). Without normalization, the model could exploit differences in slang usage as a shortcut, instead of learning actual grooming-related patterns. Therefore, it might be the case that it is too easy for the model to learn the decision boundary for these two classes, not because the model is good at detecting sexual predators, but because these two datasets were generated in different ways~\cite{schlaepfer2022online}.
 
 \paragraph{Synchronizing BERT and LIWC input.}  
-The planned model fusion relies on BERT embeddings and LIWC features extracted from the \emph{same} text chunks. BERT processed the raw text while LIWC analyzed the cleaned text, a semantic mismatch would occur. \cite{he2021deberta} Consistency ensures that, for example:  
+The planned model fusion relies on BERT embeddings and LIWC features extracted from the \emph{same} text chunks. BERT processed the raw text while LIWC analyzed the cleaned text, a semantic mismatch would occur~\cite{he2021deberta}. Consistency ensures that, for example:  
 \textit{``This chunk had high LIWC values in the sexuality category and was also classified as grooming by BERT.''}
  
 \paragraph{Improving model efficiency and robustness.}  
-Uniformly cleaned text results in more stable tokenization, reduces rare tokens, avoids model misinterpretations, and can improve performance by removing noise. \cite{sun-etal-2023-tokenization}
+Uniformly cleaned text results in more stable tokenization, reduces rare tokens, avoids model misinterpretations, and can improve performance by removing noise~\cite{sun-etal-2023-tokenization}.
 
-Additionally, \textbf{LIWC} relies on a fixed dictionary and does not recognize misspelled words \cite{pennebaker2022liwc}. Without correction, such words would not be assigned to any category, leading to incomplete feature counts. Normalization ensures, that relevant terms are correctly mapped to their LIWC categories and a more accurate LIWC analysis can be performed.
+Additionally, \textbf{LIWC} relies on a fixed dictionary and does not recognize misspelled words~\cite{pennebaker2022liwc}. Without correction, such words would not be assigned to any category, leading to incomplete feature counts. Normalization ensures, that relevant terms are correctly mapped to their LIWC categories and a more accurate LIWC analysis can be performed.
 
 \section{Raw Conversational Length Distributions }
 
@@ -140,7 +140,7 @@ To further increase model robustness and mitigate dataset-specific artifacts, a 
 \item \textbf{Enforce strict formatting}, requiring every line to follow the pattern \textit{speaker\_1: \textless text \textgreater} or \textit{speaker\_2: \textless text \textgreater}.
 \item \textbf{Generate long dialogues} with 90–120 turns, in order to reduce the risk of length-based shortcuts. This choice was made because PJ conversations are usually much longer than those from PAN12 (see Figure \ref{fig:conversation_word_lengths} for a comparison of conversation length distributions).
 \item \textbf{Restrict content} to everyday, harmless topics without any references to sexual activity.
-\item \textbf{Include small imperfections} (e.g., occasional double dots, lowercase starts, or short fragments) to match the PJ normalization profile more closely, while keeping the conversations coherent.
+\item \textbf{Include small imperfections} (for example occasional double dots, lowercase starts, or short fragments) to match the PJ normalization profile more closely, while keeping the conversations coherent.
 \end{enumerate}
 
 The synthetic data generation was done for the following two main purposes:
