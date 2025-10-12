@@ -1,19 +1,22 @@
 \begin{table}[H]
 \centering
 \small
-\caption[Evaluation for Chunk Size 512, Separated Split]{\textbf{Evaluation for chunk size 512, separated split (synthetic data only in train). }}
+\caption[Evaluation for Chunk Size 512, Separated Split]{\textbf{Evaluation for chunk size 512, separated split (synthetic data only in train).}}
 \label{tab:512_separated}
-\begin{tabular}{@{}lrrrr rr@{}}
+\begin{tabular}{@{}l *{10}{r} @{}}
 \toprule
   & \multicolumn{5}{c}{\textbf{All}} 
+  & \multicolumn{4}{c}{\textbf{Real-only}} 
   & \multicolumn{1}{c}{\textbf{Synth-only}} \\
-\cmidrule(lr){2-6} \cmidrule(lr){7-7} 
-Step (Epoch) & Loss & Accuracy & Precision & Recall & \textbf{F1} & Accuracy \\
+\cmidrule(lr){2-6} \cmidrule(lr){7-10} \cmidrule(lr){11-11} 
+Step (Epoch) & Loss & Accuracy & Precision & Recall & \textbf{F1}
+& Accuracy & Precision & Recall & F1
+& Accuracy \\
 \midrule
-3000 (0.78) & 0.472 & 0.894 & 0.690 & 0.989 & \textbf{0.813} & 0.186 \\
-6000 (1.55) & 0.517 & 0.883 & 0.668 & 0.987 & \textbf{0.797} & 0.092 \\
-9000 (2.33) & 0.518 & 0.885 & 0.670 & 0.994 & \textbf{0.800} & 0.116 \\
-11610 (3.00) & 0.534 & 0.885 & 0.670 & 0.994 & \textbf{0.801} & 0.093 \\
+3000 (0.78)  & 0.472 & 0.894 & 0.690 & 0.989 & \textbf{0.813} & 0.984 & 0.952 & 0.989 & 0.970 & 0.186 \\
+6000 (1.55)  & 0.517 & 0.883 & 0.668 & 0.987 & \textbf{0.797} & 0.984 & 0.952 & 0.987 & 0.969 & 0.092 \\
+9000 (2.33)  & 0.518 & 0.885 & 0.670 & 0.994 & \textbf{0.800} & 0.982 & 0.941 & 0.994 & 0.967 & 0.116 \\
+11610 (3.00) & 0.534 & 0.885 & 0.670 & 0.994 & \textbf{0.801} & 0.985 & 0.951 & 0.994 & 0.972 & 0.093 \\
 \bottomrule
 \end{tabular}
 \end{table}

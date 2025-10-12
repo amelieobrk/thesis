@@ -28,6 +28,8 @@ The results of the different chunk sizes and split strategies show that \textbf{
 
 Another notable feature is that the model doesn't generalize well on synthetic data, when it occurs only in the test set. The accuracy in the “synth-only” column remains low in this setting, indicating a distribution shift between real and synthetic data. However, when the proportion of synthetic data is integrated into the training, the effect disappears almost entirely, and the model learns to successfully incorporate the synthetic data into its decision boundaries.
 
+Also, the \textbf{“real-only” scores closely mirror the overall (“all”) results}, which shows that the evaluation set is dominated by real samples and that the model performs consistently well across this subset. This similarity also shows that the \textbf{improved chunking strategy and training} not only enhanced context understanding but also stabilized performance on real data that were previously perfectly separable.
+
 In addition, it can be seen that the marginal label baseline score increases slightly with increasing chunk size, which is probably due to greater stability of the classifications in longer contexts. Overall, the results confirm that BERT is able to recognize the grooming class almost perfectly, even with a larger context and in a balanced dataset, which is reflected in F1 scores of up to 0.97.
 
 \textbf{Finally, it should be emphasized that the dataset used for training was way more balanced than the original PAN12 dataset, consisting of 33\% grooming cases vs. only 5\% in PAN12, which explains the excellent metrics. The high data balance leads to clearly separable classes, which further benefits the performance of the model.}

@@ -193,7 +193,9 @@ This setup was designed to evaluate whether the model can generalize to PJ-style
 This setup was designed to test if including synthetic non-grooming data in the training phase improves the model robustness and reduces reliance on dataset specific artifacts.
 \end{enumerate}
 
-The evaluation was again performed every 3000 steps on the test set, using accuracy, precision, recall, and F1 score as metrics. To further test the model robustness, an evaluation on only the synthetic data in the test set was performed. Here, only the accuracy was reported, since precision, recall, and F1 are not defined for a single class. Additionally the confusion matrix was calculated for the complete test set after each evaluation step to analyze the types of errors made by the model. Also, the ROC-Curve and the AUC score were calculated after each evaluation step to analyze the model's performance across different classification thresholds.
+The evaluation was again performed every 3000 steps on the test set, using accuracy, precision, recall, and F1 score as metrics. To further test the model robustness, an evaluation on only the synthetic data in the test set was performed. Here, only the accuracy was reported, since precision, recall, and F1 are not defined for a single class. Also, the evaluation was once performed only on the real data in order to analyze whether the improved training procedure and the inclusion of synthetic data had any effect on the model’s performance on the conversations in PJ and PAN12.
+
+Additionally the confusion matrix was calculated for the complete test set after each evaluation step to analyze the types of errors made by the model. Also, the ROC-Curve and the AUC score were calculated after each evaluation step to analyze the model's performance across different classification thresholds.
 
 The detailed outcomes of the training across alle different chunk size and train/test split are shown in the evaluation section (Section~\ref{sec:bert_chunk_size_and_data_setup}).
 
