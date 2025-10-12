@@ -9,13 +9,13 @@ The first preprocessing pipeline was developed to provide a straight BERT baseli
 \subsection{Train-Test Split}
 For the finetuning, a train-test split was applied using \textit{GroupShuffleSplit} from \textit{sklearn}, ensuring, that all conversations from a single predator were contained completely in either the training or test set.  The split ratio was set to 70\% for training and 30\% for testing. Also, the same ratio of grooming to non-grooming conversations was kept in both sets to ensure balanced class distributions in the training and train and test data.
 
-The resulting data distribution after chunking is shown in the following table.
+The resulting data distribution after chunking is shown in the following table:
 
 \begin{table}[H] 
 \label{tab:initial_split} 
 \centering
 \small
-\caption[Initial data distribution after chunking]{\textbf{Initial data distribution after Chunking (max length 512, no message boundary control).}}
+\caption[Initial data distribution after chunking]{Initial data distribution after Chunking (max length 512, no message boundary control).}
 \begin{tabular}{lccc}
 \hline
 Split & Grooming & Non-Grooming PAN12  & \textbf{Total} \\
@@ -50,7 +50,7 @@ The normal baseline followed a classic fine-tuning pipeline for binary classific
 \subsection{Evaluation Metrics}
 To evaluate the performance of the binary classifier, the most common metrics for a binary classification task were used in \textbf{all the following model evaluations}:
 
-Let $TP$, $FP$, $TN$, and $FN$ be true positives, false positives, true negatives, and false negatives. 
+Let $TP$, $FP$, $TN$, and $FN$ be True Positives, False Positives, True Negatives and False Negatives. 
 The metrics are defined as follows:
 
 \begin{align}
@@ -60,11 +60,11 @@ The metrics are defined as follows:
 F_{1} &= 2 \cdot \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}.
 \end{align}
 
-Therefore, Accuracy measures the proportion of correctly classified instances, while precision measures the proportion of predicted positive instances that are true positives. 
-Recall measures the fraction of actual positive instances that are correctly identified, showing the model's ability to minimize false negatives. 
+Therefore, accuracy measures the proportion of correctly classified instances, while precision measures the proportion of predicted positive instances that are True Positives. 
+Recall measures the fraction of actual positive instances that are correctly identified, showing the model's ability to minimize False Negatives. 
 Finally, the $F_{1}$-score is reported as the harmonic mean of precision and recall, providing a balanced measure that accounts for both. 
 
-Since the dataset is slightly imbalanced, the $F_{1}$-score for the positive class is used as the primary metric, ensuring that both precision and recall are equally considered for evaluation.
+Since the dataset is slightly imbalanced, the $F_{1}$-score for the positive class is used as the primary metric, ensuring that the precision and recall are equally considered for evaluation.
 
 The evaluation was performed every 3000 steps during training, using the test dataset.
 
@@ -97,7 +97,7 @@ To further reduce domain leakage and length leakage, synthetic non-grooming chat
 
 To determine the optimal chunk length for the BERT baseline, the mean, standard deviation, median, minimum, and maximum of tokens per conversation across the different datasets were calculated and are shown in table~\ref{tab:token_stats}. 
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \caption{Token statistics per conversation/file across datasets}
 \label{tab:token_stats}
@@ -187,10 +187,8 @@ The training configuration for the improved pipeline was the following:
 
 The model was trained and tested across all three chunking target lengths (150, 250, 512) under two different setups
 \begin{enumerate}
-\item \textbf{Synthetic data only in the test set.}
-This setup was designed to evaluate whether the model can generalize to PJ-style negatives without having seen them during training.
-\item \textbf{Synthetic data in both train and test sets.}
-This setup was designed to test if including synthetic non-grooming data in the training phase improves the model robustness and reduces reliance on dataset specific artifacts.
+\item \textbf{Synthetic data only in the test set:} This setup was designed to evaluate whether the model can generalize to PJ-style negatives without having seen them during training.
+\item \textbf{Synthetic data in both train and test sets:} This setup was designed to test if including synthetic non-grooming data in the training phase improves the model robustness and reduces reliance on dataset specific artifacts.
 \end{enumerate}
 
 The evaluation was again performed every 3000 steps on the test set, using accuracy, precision, recall, and F1 score as metrics. To further test the model robustness, an evaluation on only the synthetic data in the test set was performed. Here, only the accuracy was reported, since precision, recall, and F1 are not defined for a single class. Also, the evaluation was once performed only on the real data in order to analyze whether the improved training procedure and the inclusion of synthetic data had any effect on the model’s performance on the conversations in PJ and PAN12.
@@ -235,7 +233,7 @@ Their exclusion ensures that the subset focuses on psychologically meaningful wo
 
 
 \section{LIWC Data Extraction}
-The LIWC features were extracted using the official LIWC-22 software. The extraction was done once over complete PJ and PAN12 conversations, as well as the synthetic non-grooming conversations in PJ style. Furthermore, the LIWC features were also extracted for each chunk in the improved chunked dataset with a chunk size of 512 tokens(Section \ref{sec:methodology}).
+The LIWC features were extracted using the official LIWC-22 software. The extraction was done once over complete PJ and PAN12 conversations, as well as the synthetic non-grooming conversations in PJ style. Furthermore, the LIWC features were also extracted for each chunk in the improved chunked dataset with a chunk size of 512 tokens (Section \ref{sec:methodology}).
 
 Also, the LIWC Features were extracted in two variants: once with all 118 features and once with the psychometric subset of 49 features (Section \ref{sec:liwc-feature-selection}). The extracted LIWC features were then stored in a separate sidecar file.
 
@@ -539,7 +537,7 @@ For a deeper analysis of misclassifications, an evaluation was performed based o
 
 \subsubsection{Top-20 selection and SHAP direction}
 
-All LIWC-2022 features were globally ranked by their \emph{mean\_abs} SHAP values, and the top 20 were selected. In addition, the SHAP sign (\emph{mean\_signed}) was used for each feature to define the “TP-like” versus “TN-like” direction.
+All LIWC-2022 features were globally ranked by their \emph{mean absolute} SHAP values, and the top 20 were selected. In addition, the SHAP sign was used for each feature to define the “TP-like” versus “TN-like” direction.
 
 \subsubsection{Z-scaling and SHAP-oriented projection}
 

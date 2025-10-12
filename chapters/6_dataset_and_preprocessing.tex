@@ -1,6 +1,6 @@
 \chapter{Dataset and Preprocessing}
 
-For this thesis, data from two different sources was collected and processed: the \textit{Perverted Justice} (PJ) archive and the PAN12 Sexual Predator Identification dataset.
+For this thesis, data from two different sources was collected and processed: the \textit{Perverted Justice} (PJ) archive and the \textbf{PAN12} Sexual Predator Identification dataset.
 
 \section{PAN12 Dataset}
 The PAN12 Sexual Predator Identification Corpus was introduced by Inches and Crestani as part of CLEF 2012 and represents the first large-scale benchmark dataset for the automatic detection of sexual predators in chat conversations~\cite{inches2012pan}. The PAN12 dataset was designed for two specific tasks: First, identifying sexual predators among all users, and second, detecting specific chat lines that are most characteristic of predatory behavior. It remains a reference benchmark in cyber grooming detection and has been employed in a lot of follow-up studies~\cite{inches2012pan}.
@@ -50,18 +50,19 @@ And can be seen as a classification task of either a binary classification betwe
 
 A big challenge of the Pan12 dataset is the \textbf{class imbalance}, as only a small fraction of all conversations are grooming-related, making the detection of sexual predators and relevant text passages particularly difficult.
 
-
 %% geändert
 
 \section{Perverted Justice (PJ) Dataset}
 The Perverted Justice (PJ) dataset~\cite{pj} is based on chat logs collected by the U.S.-based Perverted Justice Foundation, which undertook a proactive approach in the detection of online sexual predators. They trained adult volunteers posed as young people (decoy victims) in chat rooms and engaged in conversations with adults who have sexual intentions towards minors and to record these interactions. The goal was to identify and report potential predators to law enforcement agencies. Once the adult was convicted in an American Court of Law, the Foundation made all the material related to them available online for public access. The PJ dataset consists of chat logs from over 600 confirmed grooming cases, with each conversation containing multiple messages. The conversations are typically structured as dialogues between a decoy victim and an adult groomer. PJ data has been used in nearly all major peer-reviewed studies on automatic grooming detection and form the basis for the positive class in the PAN12 dataset.~\cite{inches2012pan} 
 The organisation ended its operations in 2019 following public criticism because of the controversial nature of its methods and the potential risks to decoy victims. Therefore, the original PJ dataset is no longer publicly available. However, archived chat logs remain available upon request for research purposes.~\cite{pj}
 
-%geändert
+\subsection{Data Acquisition and Integration Strategy}
 
-\paragraph{Collecting Perverted Justice (PJ) Data.}
+For this thesis, in order to increase the size and completeness of the cybergrooming class, it was decided to scrape the Perverted Justice (PJ) archive and integrate the data with the negative samples of PAN12, since it already contains a subset of all PJ conversations. This made sure that all available PJ data was used, while also benefiting from the additional non-grooming conversations in PAN12.
 
- Following a formal request, academic access to an archived version of the site via the Internet Archive (Wayback Machine) was granted. Based on this permission, the full archive was retrieved and processed for research purposes.
+\subsubsection{Collecting Perverted Justice (PJ) Data}
+
+Following a formal request, academic access to an archived version of the site via the Internet Archive (Wayback Machine) was granted. Based on this permission, the full archive was retrieved and processed for research purposes.
 
 A custom scraping tool was developed to extract all available chat logs from a 2023 snapshot. Chat dialogues were extracted from the HTML structure by identifying \textit{<div class="chatLog">} sections and splitting them into lines. Regular expressions were used to clean the data, removing timestamps, HTML comments, and formatting artifacts. 
 
@@ -76,11 +77,11 @@ After scraping, the pipeline proceeded as follows:
 
 The final PJ grooming dataset consists of \textbf{6,175} labeled conversations.
 
-\paragraph{Adding PAN12 Data (Non-Grooming Subset).}
+\subsubsection{Adding PAN12 Data (Non-Grooming Subset)}
 To create a reliable negative class, a filtered subset of the PAN12 dataset was used. PAN12 contains over 100{,}000 conversations, including more than 5{,}000 involving known sexual predators. Still, many PAN12 chats are really short, consisting of only 1-2 messagess. The preprocessing steps were as follows:
 
 \begin{itemize}
-    \item \textbf{Raw corpus loading:} The full dataset consists of \textbf{66 927} training and \textbf{155 128} test conversations, totaling \textbf{222 055} chats across both splits.
+    \item \textbf{Raw corpus loading:} The full dataset consists of \textbf{66,927} training and \textbf{155,128} test conversations, totaling \textbf{222,055} chats across both splits.
     \item \textbf{Initial filtering:} All conversations involving identified predators or labeled as containing grooming behavior (according to the official PAN12 ground truth) were excluded, since they were already included in the PJ dataset.
     \item \textbf{Participant \& length constraints:} Only conversations with exactly two participants and a minimum of 8 messages were kept.
     \item \textbf{Spam removal \& quality filtering:} An additional manual filtering step excluded problematic cases:
@@ -108,28 +109,28 @@ For preprocessing the chat data, a script was developed that uses the OpenAI API
 
 This normalization was performed \emph{prior} to fine-tuning BERT for the following three key reasons:
 
-\paragraph{Avoiding source effects.}  
+\subsubsection{Avoiding source effects}  
 The dataset combines conversations from different sources (PAN12 and PJ). Without normalization, the model could exploit differences in slang usage as a shortcut, instead of learning actual grooming-related patterns. Therefore, it might be the case that it is too easy for the model to learn the decision boundary for these two classes, not because the model is good at detecting sexual predators, but because these two datasets were generated in different ways~\cite{schlaepfer2022online}.
 
-\paragraph{Synchronizing BERT and LIWC input.}  
+\subsubsection{Synchronizing BERT and LIWC input}  
 The planned model fusion relies on BERT embeddings and LIWC features extracted from the \emph{same} text chunks. BERT processed the raw text while LIWC analyzed the cleaned text, a semantic mismatch would occur~\cite{he2021deberta}. Consistency ensures that, for example:  
 \textit{``This chunk had high LIWC values in the sexuality category and was also classified as grooming by BERT.''}
  
-\paragraph{Improving model efficiency and robustness.}  
+\subsubsection{Improving model efficiency and robustness}  
 Uniformly cleaned text results in more stable tokenization, reduces rare tokens, avoids model misinterpretations, and can improve performance by removing noise~\cite{sun-etal-2023-tokenization}.
 
-Additionally, \textbf{LIWC} relies on a fixed dictionary and does not recognize misspelled words~\cite{pennebaker2022liwc}. Without correction, such words would not be assigned to any category, leading to incomplete feature counts. Normalization ensures, that relevant terms are correctly mapped to their LIWC categories and a more accurate LIWC analysis can be performed.
+Additionally, LIWC relies on a fixed dictionary and does not recognize misspelled words~\cite{pennebaker2022liwc}. Without correction, such words would not be assigned to any category, leading to incomplete feature counts. Normalization ensures, that relevant terms are correctly mapped to their LIWC categories and a more accurate LIWC analysis can be performed.
 
 \section{Raw Conversational Length Distributions }
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.75\textwidth]{conversation_word_lengths_pj_vs_pan12.png}
-    \caption[Comparison of LIWC macro-groups]{Comparison of aggregated LIWC macro-groups between PAN12 (non-grooming) and PJ (grooming) over global conversations.}
+    \caption[Raw Conversational Length Distributions]{Comparison of raw conversational length distributions (in words) between PJ and PAN12 datasets.}
     \label{fig:conversation_word_lengths}
 \end{figure}
 
-After initial preprocessing, the length distributions of the raw conversations in both datasets were analyzed. Figure~\ref{sec:chunk-length-distributions} shows the number of words per conversation for both PJ and PAN12 datasets. It is apparent, that PJ conversations are clearly longer than those from PAN12, with a \textbf{mean length of 609 words (PJ) versus 159 words (PAN12)}. This difference in length is a potential confounder, as the model could exploit it as a shortcut for classification instead of learning semantic patterns. Therefore, the preprocessing pipeline was designed to reduce this effect by enforcing fixed-length chunking and incorporating synthetic non-grooming data in PJ style.
+After initial preprocessing, the length distributions of the raw conversations in both datasets were analyzed. Figure~\ref{fig:conversation_word_lengths} shows the number of words per conversation for both PJ and PAN12 datasets. It is apparent, that PJ conversations are clearly longer than those from PAN12. This difference in length is a potential confounder, as the model could exploit it as a shortcut for classification instead of learning semantic patterns. Therefore, the preprocessing pipeline was designed to reduce this effect by enforcing fixed-length chunking and incorporating synthetic non-grooming data in PJ style.
 
 
 \section{Generating Synthetic Non-Grooming Data}\label{sec:synthetic-data}
@@ -146,8 +147,8 @@ To further increase model robustness and mitigate dataset-specific artifacts, a 
 The synthetic data generation was done for the following two main purposes:
 
 \begin{itemize}
-    \item \textbf{Avoiding length leakage.} By generating long synthetic non-grooming conversations in PJ style, the data balance is improved and the reliance on length as a shortcut is reduced.
-    \item \textbf{Avoiding domain leakage.} Since all PJ chats are labeled as class 0 and all PAN12 chats as class 1, the model could learn to separate classes only based on dataset-specific style differences. The synthetic PJ-style non-grooming data helps to reduce this effect by providing negative examples that mirror the PJ distribution without grooming semantics.
+    \item \textbf{Avoiding length leakage:} By generating long synthetic non-grooming conversations in PJ style, the data balance is improved and the reliance on length as a shortcut is reduced.
+    \item \textbf{Avoiding domain leakage:} Since all PJ chats are labeled as class 0 and all PAN12 chats as class 1, the model could learn to separate classes only based on dataset-specific style differences. The synthetic PJ-style non-grooming data helps to reduce this effect by providing negative examples that mirror the PJ distribution without grooming semantics.
 \end{itemize}
 
 Unfortunately it was not possible to generate synthetic grooming conversations in the PAN12 style due to usage restrictions. Therefore, only non-grooming chats were created, ensuring that no artificial grooming data was introduced.
