@@ -1,5 +1,5 @@
 \chapter{Methodology} \label{sec:methodology}
-This chapter describes the methodology used in this work, including the BERT baseline model, the feature-fusion model architecture, the SHAP explainability analysis, and the analysis of misclassifications.
+This chapter describes the methodology used in this work, including the BERT baseline model, the feature fusion model architecture, the SHAP explainability analysis, and the analysis of misclassifications.
 \section{Initial Chunking Strategy for BERT Fine-tuning}
 
 The first preprocessing pipeline was developed to provide a straight BERT baseline for fine-tuning. Each conversation was reconstructed from the \textit{dialogue} field in the data into a single string with explicit speaker tags. Tokenization was then applied to the full conversation, with a maximum length of 512 tokens to provide the maximum information context in each chunk. Chunk boundaries could occur in the middle of a message. Conversations exceeding the 512 limit were split into non-overlapping chunks, which could occur at arbitrary positions within the text. Therefore, a single conversation could have multiple chunks, each treated as an independent training example. Finally, dynamic padding was applied at batch time and the tokenized dataset was then passed to the Hugging Face \textit{Trainer} for BERT fine-tuning without additional preprocessing steps.
@@ -209,7 +209,7 @@ Based on the evaluation across different chunk sizes and dataset configurations 
 %% überarbeitet
 
 
-\textbf{The Feature-Fusion and following SHAP explainability analysis was performed with two variants of feature sets in each case: }
+\textbf{The Feature Fusion and following SHAP explainability analysis was performed with two variants of feature sets in each case: }
 \begin{enumerate}
     \item \textbf{All-Features-Fusion}: Use of all 118 LIWC features.
     \item \textbf{Psychometric-Fusion}: Use of a subset of \textbf{49 psychometric LIWC features} coverings all psycholinguistic LIWC features that are highlighted in the literature as relevant for manipulative communication in Grooming Chats (Section \ref{psychometric_liwc_features_in_grooming}). The subset contains the following categories and dimensions:
@@ -256,7 +256,7 @@ To improve interpretability, the features were grouped into their macro categori
     \item \textbf{Emoji:} Emojis
     \item \textbf{Drives:} Affiliation, Achievement, Power
     \item \textbf{Motivation:} Reward, Risk, Curiosity, Allure
-    \item \textbf{Cognition:} Cognitive processes, All-or-none thinking, Insight, Causation, Discrepancy, Tentativeness, Certitude, Differentiation, Memory
+    \item \textbf{Cognition:} Cognitive processes, All-or-none, Insight, Causation, Discrepancy, Tentativeness, Certitude, Differentiation, Memory
     \item \textbf{Affect:} Positive tone, Negative tone, Emotion, Positive emotion, Negative emotion, Anxiety, Anger, Sadness, Swear words
     \item \textbf{Social:} Social behavior, Prosocial behavior, Politeness, Interpersonal conflict, Moralization, Communication, Social referents, Family, Friends, Female references, Male references, Social processes
     \item \textbf{Physical:} Health, Illness, Well Being, Mental health, Substances, Sexual, Food, Death, Physical processes
@@ -351,7 +351,7 @@ The proposed feature fusion model extends \textit{bert-base-uncased} (12 transfo
     
 %%%geändert
 
-The overall feature-fusion architecture is illustrated in the following figure~\ref{fig:liwc-bert-fusion}.
+The overall feature fusion architecture is illustrated in the following figure~\ref{fig:liwc-bert-fusion}.
 
 \begin{figure}[H]
     \centering
@@ -480,7 +480,7 @@ A positive value indicates that the LIWC features increased the certainty of the
 
 In addition, it was analyzed, if the predicted class of an input changed as a result of LIWC fusion (for example, model decision = grooming before and model decision = non-grooming after). If such a change occurs, it is referred to as a \textbf{label flip}:
 \[
-\text{flip} = \mathbb{1}\!\left[\,\hat{y}^{(\text{on})} \neq \hat{y}^{(\text{off})}\,\right], 
+\text{flip} = \mathds{1}\!\left[\,\hat{y}^{(\text{on})} \neq \hat{y}^{(\text{off})}\,\right], 
 \qquad
 \hat{y} = \arg\max_k p_k.
 \]
@@ -524,7 +524,7 @@ For each hypothesis, the analysis reported:
 
 \begin{itemize}
   \item \textbf{Proportion of samples} closer to the hypothesized centroid:
-  \[\hat{p} = \frac{1}{n}\sum_{i=1}^{n} \mathbb{1}[d_{\text{closer}} < d_{\text{farther}}].\]
+  \[\hat{p} = \frac{1}{n} \sum_{i=1}^{n} \mathds{1}[d_{\text{closer}} < d_{\text{farther}}].\]
   \item \textbf{One-sided binomial test} against \(0.5\) to determine if the observed proportion \(\hat{p}\) is significantly greater than chance.
   \item \textbf{Paired one-sided tests} on the distance differences \(d_{\mathrm{TN}} - d_{\mathrm{TP}}\) for FN and \(d_{\mathrm{TP}} - d_{\mathrm{TN}}\) for FP. The Wilcoxon signed-rank test and the one-sample \(t\)-test were used to determine whether the mean and median difference is significantly greater than 0.
 \end{itemize}
